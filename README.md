@@ -1,11 +1,9 @@
 # epiforecasts skills
 
-Agent skills for working with [epiforecasts](https://github.com/epiforecasts) packages and the
-real-time analysis workflows built around them.
+Agent skills for working with [epiforecasts](https://github.com/epiforecasts) packages and  analysis workflows.
 
 A skill is a folder of instructions a coding agent loads when a task matches its description.
-Each one here lives in `skills/<name>/` with a `SKILL.md` at its root, following the
-[Agent Skills](https://code.claude.com/docs/en/skills) layout.
+Each one here lives in `skills/<name>/` with a `SKILL.md` at its root.
 
 ## Install
 
