@@ -22,7 +22,7 @@ for other agents that read the same format.
 
 | Skill | Package | What it does |
 |---|---|---|
-| [`epinow2-routine-nowcast`](skills/epinow2-routine-nowcast) | EpiNow2 | Estimate Rt and nowcast infections from routine surveillance data, making the delay, transmission and truncation choices explicit. |
+| [`epinow2-routine-nowcast`](skills/epinow2-routine-nowcast) | EpiNow2 | Estimate the time-varying reproduction number and nowcast infections from a timeseries of count data, making key modelling choices explicit. |
 
 ## Contributing
 
