@@ -30,4 +30,4 @@
 - Say what is out of scope, not just what is in scope. A skill that declines the wrong task is
   more useful than one that attempts it.
 - Make modelling choices explicit and put them to the user rather than defaulting silently.
-- R code follows the conventions of the package the skill wraps.
+- Code follows the conventions of the package the skill wraps.
