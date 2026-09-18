@@ -1,0 +1,19 @@
+{
+  "name": "epiforecasts-skills",
+  "owner": {
+    "name": "epiforecasts"
+  },
+  "metadata": {
+    "description": "Claude Code skills for epiforecasts tools and workflows",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "epiforecasts",
+      "description": "Skills for epiforecasts packages and real-time analysis workflows",
+      "source": "./",
+      "strict": false,
+      "skills": []
+    }
+  ]
+}
