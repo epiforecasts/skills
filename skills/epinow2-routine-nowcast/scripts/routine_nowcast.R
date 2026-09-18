@@ -37,6 +37,265 @@ parse_args <- function(args) {
   return(params)
 }
 
+# --- Data inspection ------------------------------------------------------
+#
+# What a date column is called is evidence about what it means. What the counts
+# do across the week is different evidence. Neither is proof: a column called
+# `date` in an aggregate series says nothing at all, and a linelist often
+# carries onset, specimen and report dates with different completeness. So both
+# kinds of evidence are reported, the inference they support is labelled as an
+# inference, and the user settles it.
+
+DATE_TYPE_PATTERNS <- list(
+  onset     = "onset|symptom|rash",
+  specimen  = "specimen|sample|swab|test",
+  report    = "report|notif|confirm",
+  admission = "admission|admit|hosp"
+)
+
+# Returns the date type a column name suggests, or NA when the name carries no
+# signal. "date" and "count" are names, not claims.
+classify_date_name <- function(nm) {
+  low <- tolower(nm)
+  for (type in names(DATE_TYPE_PATTERNS)) {
+    if (grepl(DATE_TYPE_PATTERNS[[type]], low)) return(type)
+  }
+  NA_character_
+}
+
+# A column counts as a date column if a majority of its non-blank values parse
+# as dates. Suppressing the warning is deliberate: failure to parse is the
+# test, not an error.
+parse_date_column <- function(x) {
+  if (inherits(x, "Date")) return(x)
+  # A numeric column is not treated as a date even though as.Date() can be made
+  # to accept one: a count column of small integers would otherwise be read as
+  # days since an origin nobody specified.
+  if (is.numeric(x)) return(NULL)
+  chr <- as.character(x)
+  chr[trimws(chr) == ""] <- NA
+  if (all(is.na(chr))) return(NULL)
+  # as.Date() errors rather than returning NA on an unparseable string, so a
+  # failure to parse has to be caught to be used as the test.
+  parsed <- tryCatch(suppressWarnings(as.Date(chr)), error = function(e) NULL)
+  if (is.null(parsed)) return(NULL)
+  n_target <- sum(!is.na(chr))
+  if (n_target == 0 || sum(!is.na(parsed)) < 0.5 * n_target) return(NULL)
+  parsed
+}
+
+# Every candidate date column, with how complete it is. Completeness is the
+# fact that decides which column can be fitted on, so it is always shown.
+date_candidates <- function(df) {
+  out <- list()
+  for (nm in names(df)) {
+    parsed <- parse_date_column(df[[nm]])
+    if (is.null(parsed)) next
+    n_ok <- sum(!is.na(parsed))
+    out[[length(out) + 1]] <- data.frame(
+      column = nm,
+      type_guess = classify_date_name(nm),
+      n_present = n_ok,
+      pct_complete = 100 * n_ok / nrow(df),
+      min_date = if (n_ok > 0) min(parsed, na.rm = TRUE) else as.Date(NA),
+      max_date = if (n_ok > 0) max(parsed, na.rm = TRUE) else as.Date(NA),
+      stringsAsFactors = FALSE
+    )
+  }
+  if (length(out) == 0) {
+    return(data.frame(column = character(0), type_guess = character(0),
+                      n_present = integer(0), pct_complete = numeric(0),
+                      min_date = as.Date(character(0)), max_date = as.Date(character(0)),
+                      stringsAsFactors = FALSE))
+  }
+  res <- do.call(rbind, out)
+  res[order(-res$pct_complete), , drop = FALSE]
+}
+
+# Day-of-week structure in a daily count series. An administrative reporting
+# process leaves a weekly cycle; symptom onset does not. This is suggestive
+# only, and the amplitude is reported so the strength of the suggestion is
+# visible rather than asserted.
+week_cycle_evidence <- function(dates, counts) {
+  ord <- order(dates)
+  dates <- dates[ord]
+  counts <- as.numeric(counts[ord])
+  n <- length(counts)
+  if (n < 28) {
+    return(list(n_days = n, amplitude = NA_real_, verdict = "inconclusive",
+                reason = sprintf("series is %d days; at least 28 needed", n)))
+  }
+  roll <- as.numeric(stats::filter(counts, rep(1 / 7, 7), sides = 2))
+  ok <- !is.na(roll) & roll > 0
+  if (sum(ok) < 21) {
+    return(list(n_days = n, amplitude = NA_real_, verdict = "inconclusive",
+                reason = "too many zero or missing counts to compare weekdays"))
+  }
+  ratio <- counts[ok] / roll[ok]
+  dow <- weekdays(dates[ok])
+  by_day <- tapply(ratio, dow, mean)
+  if (length(by_day) < 7) {
+    return(list(n_days = n, amplitude = NA_real_, verdict = "inconclusive",
+                reason = "not all weekdays observed"))
+  }
+  amp <- as.numeric(max(by_day) - min(by_day))
+  verdict <- if (amp >= 0.25) "cycle" else if (amp <= 0.10) "no cycle" else "inconclusive"
+  list(
+    n_days = n, amplitude = amp, verdict = verdict,
+    trough = names(by_day)[which.min(by_day)],
+    peak = names(by_day)[which.max(by_day)],
+    reason = sprintf("weekday amplitude %.2f over %d days (lowest %s, highest %s)",
+                     amp, n, names(by_day)[which.min(by_day)], names(by_day)[which.max(by_day)])
+  )
+}
+
+detect_region_column <- function(df) {
+  hit <- names(df)[tolower(names(df)) %in% c("region", "area", "location", "geography", "la", "nhs_region")]
+  if (length(hit) == 0) return(NULL)
+  hit[1]
+}
+
+COUNT_NAMES <- c("confirm", "cases", "count", "counts", "new_cases", "confirmed", "n")
+
+# One pass over the data that every other subcommand reads from, so that
+# triage, init and fit agree about what the file contains.
+inspect_data <- function(df) {
+  cands <- date_candidates(df)
+  count_hit <- names(df)[tolower(names(df)) %in% COUNT_NAMES]
+  region_col <- detect_region_column(df)
+  shape <- if (length(count_hit) > 0 && nrow(cands) > 0) "aggregate" else if (nrow(cands) > 0) "linelist" else "unknown"
+  regions <- if (!is.null(region_col)) sort(unique(as.character(df[[region_col]]))) else character(0)
+  list(
+    shape = shape,
+    n_rows = nrow(df),
+    dates = cands,
+    count_column = if (length(count_hit) > 0) count_hit[1] else NULL,
+    region_column = region_col,
+    regions = regions
+  )
+}
+
+# --- Configuration --------------------------------------------------------
+#
+# Every field carries where its value came from. The four states are the whole
+# point of the file: they say what the user has to look at.
+#
+#   derived   computed from the data, or from another field already settled
+#   inferred  read off evidence that could be wrong; the evidence travels with it
+#   user      supplied or confirmed by the user
+#   missing   not obtainable here; `fit` refuses while a required field is missing
+#
+# The review surface is therefore `inferred` and `missing`. A `derived` field is
+# shown but not put to the user as a question.
+
+CONFIG_SOURCES <- c("derived", "inferred", "user", "missing")
+
+cfg_field <- function(value, source, evidence = NULL) {
+  if (!source %in% CONFIG_SOURCES) {
+    stop("Unknown provenance '", source, "'; must be one of ",
+         paste(CONFIG_SOURCES, collapse = ", "), ".")
+  }
+  list(value = value, source = source, evidence = evidence)
+}
+
+cfg_value <- function(cfg, name) {
+  f <- cfg[[name]]
+  if (is.null(f)) return(NULL)
+  if (identical(f$source, "missing")) return(NULL)
+  f$value
+}
+
+cfg_source <- function(cfg, name) {
+  f <- cfg[[name]]
+  if (is.null(f)) return("missing")
+  f$source
+}
+
+# A week effect is a property of the reporting process, so it follows the date
+# type. It is recomputed from the date type on every read rather than stored
+# independently: a user who corrects the date type after `init` would otherwise
+# keep a week effect chosen for the type they just rejected.
+derive_week_effect <- function(cfg) {
+  dt <- cfg_value(cfg, "date_type")
+  if (is.null(dt)) {
+    cfg$week_effect <- cfg_field(NULL, "missing", "follows date_type, which is not set")
+    return(cfg)
+  }
+  on_admin_date <- dt %in% c("report", "specimen", "admission")
+  cfg$week_effect <- cfg_field(
+    on_admin_date, "derived",
+    sprintf("date_type is '%s', %s an administrative reporting process", dt,
+            if (on_admin_date) "which is" else "which is not")
+  )
+  cfg
+}
+
+CONFIG_REQUIRED <- c("data", "date_type", "generation_time", "delay")
+
+read_config <- function(path) {
+  if (!requireNamespace("yaml", quietly = TRUE)) {
+    stop("Package 'yaml' is required to read a config file.")
+  }
+  if (!file.exists(path)) stop("Config file not found: ", path)
+  cfg <- yaml::read_yaml(path)
+  for (nm in names(cfg)) {
+    f <- cfg[[nm]]
+    if (!is.list(f) || is.null(f$source)) {
+      stop("Config field '", nm, "' has no 'source'. Every field must record ",
+           "where its value came from (", paste(CONFIG_SOURCES, collapse = ", "), ").")
+    }
+    if (!f$source %in% CONFIG_SOURCES) {
+      stop("Config field '", nm, "' has unknown source '", f$source, "'.")
+    }
+  }
+  derive_week_effect(cfg)
+}
+
+write_config <- function(cfg, path) {
+  if (!requireNamespace("yaml", quietly = TRUE)) {
+    stop("Package 'yaml' is required to write a config file.")
+  }
+  dir.create(dirname(path), showWarnings = FALSE, recursive = TRUE)
+  yaml::write_yaml(cfg, path)
+  invisible(path)
+}
+
+# Which required fields are still unset. `fit` uses this to refuse, `init` to
+# tell the user what it could not work out for them.
+config_gaps <- function(cfg) {
+  gaps <- character(0)
+  for (nm in CONFIG_REQUIRED) {
+    if (is.null(cfg_value(cfg, nm))) gaps <- c(gaps, nm)
+  }
+  gaps
+}
+
+# Fields the user is expected to look at: anything inferred from fallible
+# evidence, plus anything still missing.
+config_review_items <- function(cfg) {
+  names(cfg)[vapply(names(cfg), function(nm) cfg_source(cfg, nm) %in% c("inferred", "missing"), logical(1))]
+}
+
+format_config_value <- function(v) {
+  if (is.null(v)) return("-")
+  if (is.list(v)) {
+    return(paste(sprintf("%s=%s", names(v), vapply(v, function(x) paste(as.character(x), collapse = "/"), character(1))),
+                 collapse = ", "))
+  }
+  paste(as.character(v), collapse = ", ")
+}
+
+print_config_table <- function(cfg) {
+  cat("| Field | Value | Source | Evidence |\n")
+  cat("| :--- | :--- | :--- | :--- |\n")
+  for (nm in names(cfg)) {
+    f <- cfg[[nm]]
+    cat(sprintf("| %s | %s | %s | %s |\n", nm,
+                format_config_value(f$value), f$source,
+                if (is.null(f$evidence)) "" else f$evidence))
+  }
+}
+
 # 1. Subcommand: triage
 cmd_triage <- function(params) {
   data_path <- params[["data"]]
@@ -129,31 +388,62 @@ cmd_triage <- function(params) {
       confirm_col_name <- names(df)[confirm_match[1]]
       cat("Detected Data Type: Daily aggregate counts\n")
 
-      # Infer date type from column name or explicit flag
-      if (!is.null(date_type_param)) {
-        date_type_inferred <- tolower(date_type_param)
-      } else if (grepl("onset", date_col_name, ignore.case = TRUE)) {
-        date_type_inferred <- "onset"
-      } else {
-        date_type_inferred <- "report"
-      }
-
       df$date <- as.Date(df[[date_col_name]])
       df$confirm <- as.integer(df[[confirm_col_name]])
       df <- df[, c("date", "confirm")]
+
+      # An aggregate series carries no evidence of what its dates mean. A
+      # column called `date` is not a report date; it is a column called
+      # `date`. This used to fall through to "report", which then drove the
+      # delay structure and the week effect off an assumption nobody made.
+      # Now: the column name where it says something, the weekly cycle in the
+      # counts as weak corroboration, and otherwise unknown.
+      name_guess <- classify_date_name(date_col_name)
+      wk <- week_cycle_evidence(df$date, df$confirm)
+      if (!is.null(date_type_param)) {
+        date_type_inferred <- tolower(date_type_param)
+        date_type_basis <- "supplied with --date-type"
+      } else if (!is.na(name_guess)) {
+        date_type_inferred <- name_guess
+        date_type_basis <- sprintf("inferred from the column name '%s'", date_col_name)
+      } else if (identical(wk$verdict, "cycle")) {
+        date_type_inferred <- "report"
+        date_type_basis <- sprintf("inferred from a weekly cycle in the counts (%s)", wk$reason)
+      } else if (identical(wk$verdict, "no cycle")) {
+        date_type_inferred <- "onset"
+        date_type_basis <- sprintf("inferred from the absence of a weekly cycle (%s)", wk$reason)
+      } else {
+        date_type_inferred <- NA_character_
+        date_type_basis <- sprintf("cannot be determined: %s", wk$reason)
+      }
     } else {
       stop("Could not recognise surveillance data format. Expected either daily counts ('date', 'confirm') or linelist with onset and report dates.")
     }
   }
 
   # Print date-type recommendations
-  if (identical(date_type_inferred, "onset")) {
+  if (!exists("date_type_basis", inherits = FALSE)) {
+    date_type_basis <- if (!is.null(date_type_param)) "supplied with --date-type" else
+      "linelist aggregated by report date; pass --date-type onset to use onset dates"
+  }
+  if (is.na(date_type_inferred)) {
+    cat("Reference Date Type: UNKNOWN\n")
+    cat(sprintf("  - Basis: %s\n", date_type_basis))
+    cat("  - No delay structure or week effect is recommended, because both follow\n")
+    cat("    from the date type. Set it with --date-type report|onset|specimen|admission,\n")
+    cat("    or run `init`, which records the same question in the config.\n")
+  } else if (identical(date_type_inferred, "onset")) {
     cat("Reference Date Type: Symptom Onset Date\n")
+    cat(sprintf("  - Basis: %s\n", date_type_basis))
     cat("  - Delay Specification: Incubation period only (no reporting delay needed)\n")
     cat("  - Observation Model: pass --week-effect false to `fit` (biological symptom onset does not follow administrative weekly reporting cycles)\n")
     cat("  - Right-Truncation Guardrail: Recent onset counts suffer from unobserved onset lags (artificial drop at time series tail)\n")
   } else {
-    cat("Reference Date Type: Notification / Report Date\n")
+    cat(sprintf("Reference Date Type: %s\n",
+                if (identical(date_type_inferred, "report")) "Notification / Report Date"
+                else sprintf("%s%s Date", toupper(substring(date_type_inferred, 1, 1)),
+                             substring(date_type_inferred, 2))))
+    cat(sprintf("  - Basis: %s\n", date_type_basis))
     cat("  - Delay Specification: Compound delay = Incubation period + Reporting delay\n")
     cat("  - Observation Model: pass --week-effect true to `fit` (adjusts for administrative weekend dips and Monday reporting surges)\n")
   }
@@ -433,6 +723,24 @@ build_dist <- function(dist_name, mean_v, sd_v, max_v, label) {
 # 4. Subcommand: fit
 cmd_fit <- function(params) {
   suppressPackageStartupMessages(library(EpiNow2))
+
+  # A config file supplies whatever was not passed as a flag. The refusal on a
+  # missing generation time or delay is the same refusal either way: it is
+  # checked below on the resolved values, so a config with a missing field
+  # cannot get past a check that a bare command line would fail.
+  config_path <- params[["config"]]
+  if (!is.null(config_path)) {
+    cfg <- read_config(config_path)
+    gaps <- config_gaps(cfg)
+    if (length(gaps) > 0) {
+      stop("Config ", config_path, " is missing required field(s): ",
+           paste(gaps, collapse = ", "), ".\n",
+           "Each is recorded in the file with the reason it could not be set. ",
+           "Fill them in and re-run; nothing is defaulted on your behalf.")
+    }
+    params <- apply_config_to_params(params, cfg)
+  }
+
   data_path <- params[["data"]]
   out_dir <- if (!is.null(params[["output-dir"]])) params[["output-dir"]] else "outputs/fit"
   dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
@@ -488,16 +796,38 @@ cmd_fit <- function(params) {
            ". Produce a correctly shaped file with: ",
            "triage --data <your file> --cases-out <clean file>.")
     }
-    cases <- cases[, c("date", "confirm")]
+    keep_cols <- c("date", "confirm", if ("region" %in% names(cases)) "region")
+    cases <- cases[, keep_cols, drop = FALSE]
     cases$date <- as.Date(cases$date)
     cases$confirm <- as.integer(cases$confirm)
     if (any(is.na(cases$date))) stop("Some 'date' values could not be parsed as dates.")
     if (any(cases$confirm < 0, na.rm = TRUE)) stop("Data contains negative case counts.")
-    gaps <- as.integer(diff(sort(cases$date)))
-    if (length(gaps) > 0 && any(gaps != 1)) {
-      stop("Dates are not a contiguous daily sequence. EpiNow2 requires unbroken ",
-           "daily data. Fix with: triage --data <file> --fill-zeros --cases-out <clean file>.")
+    # Checked within region: two regions each contiguous look like duplicate
+    # dates when pooled, and a pooled check would reject a valid regional file.
+    date_groups <- if ("region" %in% names(cases)) split(cases$date, cases$region) else list(cases$date)
+    for (g in date_groups) {
+      gaps <- as.integer(diff(sort(g)))
+      if (length(gaps) > 0 && any(gaps != 1)) {
+        stop("Dates are not a contiguous daily sequence. EpiNow2 requires unbroken ",
+             "daily data. Fix with: triage --data <file> --fill-zeros --cases-out <clean file>.")
+      }
     }
+  }
+
+  # Regions are fitted separately by default when the data carries them:
+  # pooling across regions with different epidemics estimates an Rt for a
+  # population that does not exist. --pool asks for that deliberately, and is
+  # recorded as a caveat rather than done silently.
+  pool <- !is.null(params[["pool"]]) && !identical(params[["pool"]], FALSE)
+  has_region <- "region" %in% names(cases) && length(unique(cases$region)) > 1
+  by_region <- has_region && !pool &&
+    (is.null(params[["by-region"]]) || !identical(params[["by-region"]], "false"))
+  n_pooled_regions <- if (has_region) length(unique(cases$region)) else 0L
+  if (has_region && pool) {
+    cases <- aggregate(confirm ~ date, data = cases, FUN = sum)
+    cases <- cases[order(cases$date), ]
+  } else if (!by_region && "region" %in% names(cases)) {
+    cases <- cases[, c("date", "confirm"), drop = FALSE]
   }
 
   # --- Transmission and observation distributions ---------------------------
@@ -543,6 +873,14 @@ cmd_fit <- function(params) {
   # email, so anything that qualifies the estimate is written next to the fit
   # and re-attached to the number by `evaluate`.
   caveats <- character(0)
+
+  if (has_region && pool) {
+    caveats <- c(caveats, paste(
+      "Case counts were pooled across", n_pooled_regions,
+      "regions before fitting. The resulting Rt is for the pooled series, which",
+      "averages over regional epidemics at different stages."
+    ))
+  }
 
   if (!is.null(params[["gt-substituted"]])) {
     caveats <- c(caveats, paste(
@@ -603,17 +941,62 @@ cmd_fit <- function(params) {
   cat(sprintf("  Week effect: %s\n", if (week_effect) "estimated" else "not estimated"))
   cat(sprintf("  Truncation:  %s\n", trunc_str))
 
-  fit <- estimate_infections(
-    cases,
-    generation_time = gt_opts(gt_dist),
-    delays = delay_opts(delay_dist),
-    truncation = trunc_configuration,
-    rt = rt_configuration,
-    gp = gp_configuration,
-    obs = obs_configuration,
-    stan = stan_opts(seed = seed, cores = cores, control = list(adapt_delta = 0.99)),
-    verbose = FALSE
-  )
+  if (by_region) {
+    cat(sprintf("  Regions:     %d, fitted separately (%s)\n",
+                n_pooled_regions, paste(sort(unique(cases$region)), collapse = ", ")))
+  }
+
+  # Prints the specification exactly as it will be fitted, then stops. What
+  # gets resolved from a config, and what a flag overrode, is otherwise only
+  # visible by waiting for a sampler run to finish.
+  if (!is.null(params[["dry-run"]]) && !identical(params[["dry-run"]], FALSE)) {
+    cat(sprintf("  GT:          %s(mean = %.2f, sd = %.2f, max = %s)\n",
+                if (is.null(params[["gt-dist"]])) "lognormal" else params[["gt-dist"]],
+                as.numeric(params[["gt-mean"]]), as.numeric(params[["gt-sd"]]),
+                if (is.null(params[["gt-max"]])) "14" else params[["gt-max"]]))
+    cat(sprintf("  Delay:       %s(mean = %.2f, sd = %.2f, max = %s)\n",
+                if (is.null(params[["delay-dist"]])) "lognormal" else params[["delay-dist"]],
+                as.numeric(params[["delay-mean"]]), as.numeric(params[["delay-sd"]]),
+                if (is.null(params[["delay-max"]])) "14" else params[["delay-max"]]))
+    if (length(caveats) > 0) {
+      cat("  Caveats:\n")
+      for (cv in caveats) cat(sprintf("    - %s\n", cv))
+    }
+    cat("Dry run: specification resolved, nothing fitted.\n")
+    return(invisible(NULL))
+  }
+
+  fit <- if (by_region) {
+    # Each region is fitted on its own and returned as a full
+    # estimate_infections object, so the diagnostics and the reporting path are
+    # the same code for one region as for twenty.
+    regional_epinow(
+      data = cases,
+      generation_time = gt_opts(gt_dist),
+      delays = delay_opts(delay_dist),
+      truncation = trunc_configuration,
+      rt = rt_configuration,
+      gp = gp_configuration,
+      obs = obs_configuration,
+      stan = stan_opts(seed = seed, cores = cores, control = list(adapt_delta = 0.99)),
+      output = c("region"),
+      return_output = TRUE,
+      verbose = FALSE,
+      logs = NULL
+    )
+  } else {
+    estimate_infections(
+      cases,
+      generation_time = gt_opts(gt_dist),
+      delays = delay_opts(delay_dist),
+      truncation = trunc_configuration,
+      rt = rt_configuration,
+      gp = gp_configuration,
+      obs = obs_configuration,
+      stan = stan_opts(seed = seed, cores = cores, control = list(adapt_delta = 0.99)),
+      verbose = FALSE
+    )
+  }
   saveRDS(fit, file.path(out_dir, "fit.rds"))
   # Written even when empty, so `evaluate` can tell "no caveats" apart from
   # "caveats were never recorded because this fit predates the mechanism".
@@ -803,6 +1186,15 @@ cmd_evaluate <- function(params) {
   }
   caveats <- if (is.null(caveat_info)) NA_character_ else caveat_info$caveats
 
+  # A regional fit holds one estimate_infections object per region. It is
+  # reported as a table with its own per-region gate rather than as one
+  # headline, because there is no single Rt to headline.
+  if (is.list(fit) && !is.null(fit$regional)) {
+    result <- report_regional(fit, caveats, date_str)
+    finish_report()
+    return(invisible(result))
+  }
+
   rt_all <- summary(fit, type = "parameters", params = "R")
   available <- sort(unique(as.Date(rt_all$date)))
 
@@ -977,11 +1369,594 @@ cmd_evaluate <- function(params) {
   invisible(list(pass = TRUE))
 }
 
+
+# Look up a distribution and return it as numbers, rather than as printed text.
+# The substitution rule lives here so that `lookup-delay` and `init` cannot
+# drift apart about when a serial interval stands in for a generation time.
+#
+# Returns NULL when nothing usable exists. An entry with no parameters counts
+# as nothing usable: see has_usable_parameters.
+epiparameter_lookup <- function(disease, param) {
+  if (!requireNamespace("epiparameter", quietly = TRUE)) return(NULL)
+  wants_gt <- grepl("generation", param, ignore.case = TRUE)
+  substituted <- FALSE
+
+  lookup <- function(nm) {
+    tryCatch(
+      epiparameter::epiparameter_db(
+        disease = disease, epi_name = nm, single_epiparameter = TRUE
+      ),
+      error = function(e) NULL
+    )
+  }
+
+  ep <- lookup(param)
+  if (wants_gt && !has_usable_parameters(ep)) {
+    ep_si <- lookup("serial interval")
+    if (has_usable_parameters(ep_si)) {
+      ep <- ep_si
+      param <- "serial interval"
+      substituted <- TRUE
+    }
+  }
+  if (!has_usable_parameters(ep)) return(NULL)
+
+  pars <- epiparameter::get_parameters(ep)
+  family <- tryCatch(as.character(stats::family(ep$prob_distribution)),
+                     error = function(e) NA_character_)
+
+  # EpiNow2's LogNormal() and Gamma() take natural-scale mean and sd, so a
+  # published meanlog/sdlog or shape/rate is converted here rather than being
+  # passed through to mean something different.
+  if (all(c("meanlog", "sdlog") %in% names(pars))) {
+    ml <- pars[["meanlog"]]; sl <- pars[["sdlog"]]
+    mean_v <- exp(ml + sl^2 / 2)
+    sd_v <- mean_v * sqrt(exp(sl^2) - 1)
+    dist <- "lognormal"
+  } else if (all(c("shape", "rate") %in% names(pars))) {
+    mean_v <- pars[["shape"]] / pars[["rate"]]
+    sd_v <- sqrt(pars[["shape"]]) / pars[["rate"]]
+    dist <- "gamma"
+  } else if (all(c("shape", "scale") %in% names(pars))) {
+    mean_v <- pars[["shape"]] * pars[["scale"]]
+    sd_v <- sqrt(pars[["shape"]]) * pars[["scale"]]
+    dist <- "gamma"
+  } else if (all(c("mean", "sd") %in% names(pars))) {
+    mean_v <- pars[["mean"]]; sd_v <- pars[["sd"]]
+    dist <- if (identical(family, "lnorm")) "lognormal" else "gamma"
+  } else {
+    return(NULL)
+  }
+
+  max_v <- tryCatch({
+    q <- stats::quantile(ep$prob_distribution, 0.999)
+    max(7, ceiling(as.numeric(q)))
+  }, error = function(e) NA_real_)
+  if (!is.finite(max_v)) max_v <- 14
+
+  returned_name <- tryCatch(as.character(ep$epi_name), error = function(e) NA_character_)
+  returned_disease <- tryCatch(as.character(ep$disease), error = function(e) NA_character_)
+  if (length(returned_name) != 1 || is.na(returned_name)) returned_name <- param
+  if (length(returned_disease) != 1 || is.na(returned_disease)) returned_disease <- disease
+
+  list(
+    dist = dist, mean = round(as.numeric(mean_v), 3), sd = round(as.numeric(sd_v), 3),
+    max = as.integer(max_v), substituted = substituted,
+    name = returned_name, disease = returned_disease, ep = ep
+  )
+}
+
+# --- Subcommand: estimate-truncation --------------------------------------
+#
+# Right truncation is a question the user is usually asked and usually cannot
+# answer. If they hold earlier vintages of the same series, the data answers it
+# instead: how much each vintage's recent counts were later revised upwards is
+# exactly the truncation distribution.
+cmd_estimate_truncation <- function(params) {
+  vintages <- params[["vintages"]]
+  config_path <- params[["config"]]
+  seed <- if (!is.null(params[["seed"]])) as.integer(params[["seed"]]) else 20260915
+  cores <- if (!is.null(params[["cores"]])) as.integer(params[["cores"]]) else 2
+
+  if (is.null(vintages)) {
+    stop("--vintages <dir> is required: a directory of CSV snapshots of the same ",
+         "series taken on different days, each with 'date' and 'confirm'. ",
+         "Without at least two vintages there is nothing to estimate from.")
+  }
+  files <- if (dir.exists(vintages)) {
+    sort(list.files(vintages, pattern = "\\.csv$", full.names = TRUE))
+  } else {
+    sort(Sys.glob(vintages))
+  }
+  if (length(files) < 2) {
+    stop("Found ", length(files), " vintage file(s) in '", vintages, "'. ",
+         "At least 2 are needed: truncation is estimated from how later ",
+         "vintages revise earlier ones.")
+  }
+
+  suppressPackageStartupMessages(library(EpiNow2))
+  vin <- lapply(files, function(f) {
+    d <- read.csv(f, stringsAsFactors = FALSE)
+    missing_cols <- setdiff(c("date", "confirm"), names(d))
+    if (length(missing_cols) > 0) {
+      stop("Vintage ", basename(f), " is missing column(s): ",
+           paste(missing_cols, collapse = ", "), ".")
+    }
+    d$date <- as.Date(d$date)
+    d$confirm <- as.integer(d$confirm)
+    d[order(d$date), c("date", "confirm")]
+  })
+
+  cat(sprintf("Estimating right truncation from %d vintages (%s to %s)...\n",
+              length(vin), basename(files[1]), basename(files[length(files)])))
+  est <- estimate_truncation(vin, stan = stan_opts(seed = seed, cores = cores), verbose = FALSE)
+
+  cat("=== Estimated truncation distribution ===\n")
+  print(est$dist)
+  cat("=========================================\n")
+
+  if (!is.null(config_path)) {
+    cfg <- read_config(config_path)
+    pars <- tryCatch(as.list(est$dist), error = function(e) NULL)
+    mean_v <- tryCatch(as.numeric(mean(est$dist)), error = function(e) NA_real_)
+    sd_v <- tryCatch(as.numeric(sd(est$dist)), error = function(e) NA_real_)
+    max_v <- tryCatch(as.integer(max(est$dist)), error = function(e) NA_integer_)
+    if (!is.finite(mean_v) || !is.finite(sd_v)) {
+      cat("Could not reduce the fitted truncation to mean and sd; config not updated.\n")
+    } else {
+      cfg$truncation <- cfg_field(
+        list(dist = "lognormal", mean = round(mean_v, 3), sd = round(sd_v, 3),
+             max = if (is.finite(max_v)) max_v else 10L),
+        "derived",
+        sprintf("estimate_truncation() over %d vintages", length(vin))
+      )
+      write_config(cfg, config_path)
+      cat(sprintf("Truncation written to %s.\n", config_path))
+    }
+  } else {
+    cat("Pass --config <file> to write this into a config file.\n")
+  }
+  invisible(est)
+}
+
+# --- Regional reporting ---------------------------------------------------
+#
+# regional_epinow() returns one object per region that is itself an
+# estimate_infections fit, so the diagnostics and the Rt extraction above apply
+# unchanged. What changes is the gate: each region is judged on its own, and a
+# run where any region failed cannot exit clean, because a table with a hole in
+# it is easy to read as a table.
+report_regional <- function(obj, caveats, date_str) {
+  regions <- names(obj$regional)
+  rows <- list()
+  any_fail <- FALSE
+
+  for (rg in regions) {
+    est <- obj$regional[[rg]]
+    if (is.null(est) || is.null(est$fit)) {
+      rows[[rg]] <- list(region = rg, status = "ERROR", note = "region did not fit")
+      any_fail <- TRUE
+      next
+    }
+    diag <- tryCatch(compute_diagnostics(est), error = function(e) NULL)
+    if (is.null(diag)) {
+      rows[[rg]] <- list(region = rg, status = "ERROR", note = "diagnostics unavailable")
+      any_fail <- TRUE
+      next
+    }
+    verdict <- assess_diagnostics(diag)
+    rt_all <- summary(est, type = "parameters", params = "R")
+    available <- sort(unique(as.Date(rt_all$date)))
+    report_date <- if (!is.null(date_str)) as.Date(date_str) else max(est$observations$date)
+    if (!(report_date %in% available)) report_date <- max(available)
+
+    row <- list(region = rg, status = if (verdict$pass) "PASS" else "FAIL",
+                date = report_date, diag = diag, reasons = verdict$reasons)
+    if (verdict$pass) {
+      rt_row <- rt_all[rt_all$date == report_date, ]
+      row$rt <- rt_row$median
+      row$lo <- rt_row$lower_90
+      row$hi <- rt_row$upper_90
+      row$p <- prob_rt_above_one(est, rt_all, report_date)
+    } else {
+      any_fail <- TRUE
+    }
+    rows[[rg]] <- row
+  }
+
+  cat("\n# Routine Surveillance Transmission & Nowcast Summary (by region)\n")
+  cat(sprintf("**Regions:** %d | **Engine:** EpiNow2 %s\n\n", length(regions),
+              as.character(utils::packageVersion("EpiNow2"))))
+
+  cat("## Estimates and diagnostics by region\n\n")
+  cat("| Region | Convergence | Rt (90% CrI) | P(Rt > 1) | Max Rhat | Min ESS | Divergences |\n")
+  cat("| :--- | :--- | :--- | ---: | ---: | ---: | ---: |\n")
+  for (rg in regions) {
+    r <- rows[[rg]]
+    if (identical(r$status, "ERROR")) {
+      cat(sprintf("| %s | ERROR | withheld | - | - | - | - |\n", rg))
+    } else if (identical(r$status, "FAIL")) {
+      cat(sprintf("| %s | FAIL | withheld | - | %.4f | %.0f | %d |\n",
+                  rg, r$diag$max_rhat, r$diag$min_ess, r$diag$n_divergent))
+    } else {
+      cat(sprintf("| %s | PASS | %.2f (%.2f to %.2f) | %s | %.4f | %.0f | %d |\n",
+                  rg, r$rt, r$lo, r$hi,
+                  if (is.na(r$p)) "-" else sprintf("%.2f", r$p),
+                  r$diag$max_rhat, r$diag$min_ess, r$diag$n_divergent))
+    }
+  }
+  cat("\n")
+
+  failed <- regions[vapply(regions, function(rg) !identical(rows[[rg]]$status, "PASS"), logical(1))]
+  if (length(failed) > 0) {
+    cat("## Regions with estimates withheld\n\n")
+    cat("No Rt is reported for these. Either the region did not fit at all, or the\n")
+    cat("sampler did not converge and the posterior it explored is not the model's\n")
+    cat("posterior. The reason is given per region below. This run exits non-zero:\n")
+    cat("a partial table is not a successful report.\n\n")
+    for (rg in failed) {
+      r <- rows[[rg]]
+      cat(sprintf("* %s: %s\n", rg,
+                  if (identical(r$status, "ERROR")) r$note else paste(r$reasons, collapse = "; ")))
+    }
+    cat("\nReconsider the model for these regions rather than refitting unchanged.\n")
+    cat("A sparse region is often the cause: check its case counts before\n")
+    cat("changing the model for every region.\n\n")
+  }
+
+  if (identical(caveats, NA_character_)) {
+    cat("## Caveats\n\n")
+    cat("Parameter provenance was not recorded for this fit, so whether published,\n")
+    cat("substituted or default distributions were used cannot be determined from\n")
+    cat("the fit object. Treat every estimate above as unattributed.\n\n")
+  } else if (length(caveats) > 0) {
+    cat("## Caveats\n\n")
+    cat("These qualify every estimate above, in every region. Carry them with any\n")
+    cat("number taken from this report.\n\n")
+    for (cv in caveats) cat(sprintf("* %s\n", cv))
+    cat("\n")
+  }
+
+  invisible(list(pass = !any_fail, rows = rows))
+}
+
+# --- Config into flags ----------------------------------------------------
+#
+# The config supplies anything the caller did not. Doing it this way, rather
+# than threading a config object through `fit`, keeps one code path: a value
+# from the file is indistinguishable downstream from the same value typed as a
+# flag, and an explicit flag always wins because it is already set.
+apply_config_to_params <- function(params, cfg) {
+  set <- function(p, key, val) {
+    if (is.null(p[[key]]) && !is.null(val)) p[[key]] <- val
+    p
+  }
+  params <- set(params, "data", cfg_value(cfg, "data"))
+
+  gt <- cfg_value(cfg, "generation_time")
+  if (!is.null(gt)) {
+    params <- set(params, "gt-dist", gt$dist)
+    params <- set(params, "gt-mean", gt$mean)
+    params <- set(params, "gt-sd", gt$sd)
+    params <- set(params, "gt-max", gt$max)
+    if (isTRUE(gt$substituted)) params <- set(params, "gt-substituted", TRUE)
+  }
+  dl <- cfg_value(cfg, "delay")
+  if (!is.null(dl)) {
+    params <- set(params, "delay-dist", dl$dist)
+    params <- set(params, "delay-mean", dl$mean)
+    params <- set(params, "delay-sd", dl$sd)
+    params <- set(params, "delay-max", dl$max)
+  }
+  tr <- cfg_value(cfg, "truncation")
+  if (!is.null(tr)) {
+    params <- set(params, "trunc-dist", tr$dist)
+    params <- set(params, "trunc-mean", tr$mean)
+    params <- set(params, "trunc-sd", tr$sd)
+    params <- set(params, "trunc-max", tr$max)
+  }
+  dyn <- cfg_value(cfg, "dynamics")
+  if (!is.null(dyn)) {
+    if (identical(dyn$type, "rw")) {
+      params <- set(params, "rw", dyn$step)
+    } else if (identical(dyn$type, "gp") && !is.null(dyn$ls)) {
+      params <- set(params, "gp-ls", dyn$ls)
+    }
+  }
+  we <- cfg_value(cfg, "week_effect")
+  if (!is.null(we)) params <- set(params, "week-effect", if (isTRUE(we)) "true" else "false")
+  rp <- cfg_value(cfg, "rt_prior")
+  if (!is.null(rp)) {
+    params <- set(params, "r-prior-mean", rp$mean)
+    params <- set(params, "r-prior-sd", rp$sd)
+  }
+  st <- cfg_value(cfg, "stan")
+  if (!is.null(st)) {
+    params <- set(params, "seed", st$seed)
+    params <- set(params, "cores", st$cores)
+  }
+  br <- cfg_value(cfg, "by_region")
+  if (isTRUE(br)) params <- set(params, "by-region", TRUE)
+  params
+}
+
+# --- Subcommand: init -----------------------------------------------------
+#
+# Works out everything about the fit that can be worked out, records where each
+# value came from, and writes the result as a config file. What it cannot
+# determine is written as missing rather than guessed, and what it inferred from
+# fallible evidence is labelled so the user knows to check it.
+#
+# The point is the order of operations: the user reviews a specification that
+# already exists instead of answering a sequence of questions that builds one.
+
+# Dynamics are chosen by a stated rule so that the choice is reproducible and
+# testable. A Gaussian process needs enough series to estimate a length scale;
+# a short series or known step changes are a random walk's job.
+choose_dynamics <- function(n_days, has_steps) {
+  if (has_steps) {
+    return(cfg_field(list(type = "rw", step = 7), "inferred",
+                     "intervention dates supplied, so change is treated as stepwise"))
+  }
+  if (n_days < 42) {
+    return(cfg_field(list(type = "rw", step = 7), "inferred",
+                     sprintf("series is %d days; too short to estimate a GP length scale", n_days)))
+  }
+  ls <- if (n_days >= 90) 21 else 14
+  cfg_field(list(type = "gp", ls = ls), "inferred",
+            sprintf("series is %d days with no step changes given; GP length scale %d days", n_days, ls))
+}
+
+# A published distribution, as a config block. Returns NULL when epiparameter
+# has nothing usable, which is written into the config as missing.
+lookup_dist_field <- function(disease, param) {
+  if (!requireNamespace("epiparameter", quietly = TRUE)) return(NULL)
+  res <- epiparameter_lookup(disease, param)
+  if (is.null(res)) return(NULL)
+  value <- list(
+    dist = res$dist, mean = res$mean, sd = res$sd, max = res$max,
+    substituted = res$substituted
+  )
+  evidence <- sprintf("epiparameter: %s, %s%s", res$disease, res$name,
+                      if (res$substituted) " (SUBSTITUTED for a generation time)" else "")
+  cfg_field(value, "inferred", evidence)
+}
+
+cmd_init <- function(params) {
+  data_path <- params[["data"]]
+  out_path <- if (!is.null(params[["out"]])) params[["out"]] else "nowcast.yaml"
+  cases_out <- if (!is.null(params[["cases-out"]])) params[["cases-out"]] else "outputs/cases.csv"
+  disease <- params[["disease"]]
+  date_col_param <- params[["date-column"]]
+  date_type_param <- params[["date-type"]]
+  has_steps <- !is.null(params[["intervention-dates"]])
+
+  if (is.null(data_path)) stop("init requires --data <path>.")
+  if (!file.exists(data_path)) stop("Data file not found: ", data_path)
+  df <- read.csv(data_path, stringsAsFactors = FALSE)
+  info <- inspect_data(df)
+
+  if (nrow(info$dates) == 0) {
+    stop("No date column found in ", data_path, ". Expected at least one column ",
+         "whose values parse as dates.")
+  }
+
+  cat("=== Data inspection ===\n")
+  cat(sprintf("Rows: %d | Shape: %s\n", info$n_rows, info$shape))
+  cat("\nCandidate date columns:\n")
+  cat("| Column | Name suggests | Complete | Range |\n")
+  cat("| :--- | :--- | ---: | :--- |\n")
+  for (i in seq_len(nrow(info$dates))) {
+    r <- info$dates[i, ]
+    cat(sprintf("| %s | %s | %.1f%% | %s to %s |\n", r$column,
+                if (is.na(r$type_guess)) "nothing" else r$type_guess,
+                r$pct_complete, format(r$min_date), format(r$max_date)))
+  }
+  cat("\n")
+
+  # --- Date column ---------------------------------------------------------
+  # Completeness decides what can be fitted, so it is the rule here, and the
+  # cost of the choice (rows that will be dropped) is always reported.
+  if (!is.null(date_col_param)) {
+    if (!date_col_param %in% info$dates$column) {
+      stop("--date-column '", date_col_param, "' is not a date column in this file. ",
+           "Found: ", paste(info$dates$column, collapse = ", "), ".")
+    }
+    chosen <- date_col_param
+    date_col_field <- cfg_field(chosen, "user", "supplied with --date-column")
+  } else {
+    chosen <- info$dates$column[1]
+    pct <- info$dates$pct_complete[1]
+    ev <- if (nrow(info$dates) == 1) {
+      sprintf("only date column in the file, %.1f%% complete", pct)
+    } else {
+      sprintf("most complete of %d date columns (%.1f%%, next is %s at %.1f%%)",
+              nrow(info$dates), pct, info$dates$column[2], info$dates$pct_complete[2])
+    }
+    date_col_field <- cfg_field(chosen, if (nrow(info$dates) == 1) "derived" else "inferred", ev)
+  }
+
+  dates_all <- parse_date_column(df[[chosen]])
+  n_missing_date <- sum(is.na(dates_all))
+  if (n_missing_date > 0) {
+    cat(sprintf("Note: %d of %d rows (%.1f%%) have no %s and will be excluded.\n",
+                n_missing_date, nrow(df), 100 * n_missing_date / nrow(df), chosen))
+  }
+
+  # --- Daily series --------------------------------------------------------
+  # An aggregate file already has one row per date (per region); a linelist has
+  # one row per case and has to be counted. Doing the region split inside each
+  # branch keeps the row counts aligned: tabulating first and attaching regions
+  # afterwards mismatches, because tabulation changes the number of rows.
+  keep <- !is.na(dates_all)
+  region_vals <- if (!is.null(info$region_column)) {
+    as.character(df[[info$region_column]][keep])
+  } else {
+    NULL
+  }
+  if (identical(info$shape, "aggregate")) {
+    series <- data.frame(date = dates_all[keep],
+                         confirm = as.integer(df[[info$count_column]][keep]),
+                         stringsAsFactors = FALSE)
+    if (!is.null(region_vals)) series$region <- region_vals
+  } else if (is.null(region_vals)) {
+    series <- as.data.frame(table(dates_all[keep]), stringsAsFactors = FALSE)
+    names(series) <- c("date", "confirm")
+    series$date <- as.Date(series$date)
+    series$confirm <- as.integer(series$confirm)
+  } else {
+    series <- as.data.frame(table(dates_all[keep], region_vals), stringsAsFactors = FALSE)
+    names(series) <- c("date", "region", "confirm")
+    series$date <- as.Date(series$date)
+    series$confirm <- as.integer(series$confirm)
+  }
+  if (!is.null(region_vals)) {
+    series <- series[order(series$region, series$date), c("date", "confirm", "region")]
+  } else {
+    series <- series[order(series$date), ]
+  }
+
+  pooled <- if (is.null(info$region_column)) series else {
+    agg <- aggregate(confirm ~ date, data = series, FUN = sum)
+    agg[order(agg$date), ]
+  }
+  n_days <- as.integer(max(pooled$date) - min(pooled$date) + 1)
+
+  # EpiNow2 needs an unbroken daily sequence. Whether a date with no row means
+  # no cases or no report is the user's call, so the gap is reported rather
+  # than filled: zero-filling an unreported day invents an observation.
+  if (nrow(pooled) < n_days) {
+    cat(sprintf("\nWarning: %d of %d calendar days have no row. EpiNow2 requires an\n",
+                n_days - nrow(pooled), n_days))
+    cat("unbroken daily series. If the missing days are genuine zeros, fill them with:\n")
+    cat(sprintf("  triage --data %s --fill-zeros --cases-out %s\n", data_path, cases_out))
+    cat("If they are unreported days, they are missing data and zero-filling would\n")
+    cat("invent observations; trim the series to the reported period instead.\n")
+  }
+
+  # --- Date type -----------------------------------------------------------
+  # Two weak signals, neither of which is allowed to settle the question on its
+  # own: what the column is called, and whether the counts run on a weekly
+  # administrative cycle. An aggregate series called `date` gives neither.
+  wk <- week_cycle_evidence(pooled$date, pooled$confirm)
+  name_guess <- classify_date_name(chosen)
+
+  date_type_field <- if (!is.null(date_type_param)) {
+    if (!date_type_param %in% c("report", "onset", "specimen", "admission")) {
+      stop("--date-type must be one of report, onset, specimen, admission; got '",
+           date_type_param, "'.")
+    }
+    cfg_field(date_type_param, "user", "supplied with --date-type")
+  } else if (!is.na(name_guess)) {
+    cfg_field(name_guess, "inferred",
+              sprintf("column name '%s' suggests %s; %s", chosen, name_guess, wk$reason))
+  } else if (identical(wk$verdict, "cycle")) {
+    cfg_field("report", "inferred",
+              sprintf("column name carries no signal; counts show a weekly cycle (%s), consistent with an administrative reporting date", wk$reason))
+  } else if (identical(wk$verdict, "no cycle")) {
+    cfg_field("onset", "inferred",
+              sprintf("column name carries no signal; counts show no weekly cycle (%s), consistent with symptom onset", wk$reason))
+  } else {
+    cfg_field(NULL, "missing",
+              sprintf("column name carries no signal and the counts are %s. Set --date-type.", wk$reason))
+  }
+
+  # --- Distributions -------------------------------------------------------
+  gt_field <- if (!is.null(disease)) lookup_dist_field(disease, "generation time") else NULL
+  if (is.null(gt_field)) {
+    gt_field <- cfg_field(NULL, "missing", if (is.null(disease)) {
+      "no --disease given; look one up with lookup-delay or supply the numbers"
+    } else {
+      sprintf("epiparameter has no usable generation time or serial interval for '%s'", disease)
+    })
+  }
+  delay_field <- if (!is.null(disease)) lookup_dist_field(disease, "incubation period") else NULL
+  if (is.null(delay_field)) {
+    delay_field <- cfg_field(NULL, "missing",
+      "estimate it from your own linelist with estimate-delay, or supply the numbers")
+  }
+
+  trunc_field <- cfg_field(NULL, "missing",
+    "no data vintages supplied; run estimate-truncation with --vintages to estimate it, or leave unset if recent counts are complete")
+
+  # --- Assemble ------------------------------------------------------------
+  cfg <- list(
+    data = cfg_field(cases_out, "derived", sprintf("cleaned daily series written from %s", data_path)),
+    date_column = date_col_field,
+    date_type = date_type_field,
+    regions = cfg_field(info$regions, if (is.null(info$region_column)) "derived" else "derived",
+                        if (is.null(info$region_column)) "no region column in the data"
+                        else sprintf("from column '%s'", info$region_column)),
+    by_region = cfg_field(length(info$regions) > 1, "derived",
+                          sprintf("%d region(s) detected", length(info$regions))),
+    generation_time = gt_field,
+    delay = delay_field,
+    truncation = trunc_field,
+    dynamics = choose_dynamics(n_days, has_steps),
+    rt_prior = cfg_field(list(mean = 2.0, sd = 1.0), "derived", "package-conventional weakly informative prior"),
+    stan = cfg_field(list(seed = 20260915, cores = 4), "derived", "defaults")
+  )
+  cfg <- derive_week_effect(cfg)
+
+  # --- Sparse regions ------------------------------------------------------
+  # Named here rather than left to fail inside the sampler, where the message
+  # would be about Stan rather than about the data.
+  if (length(info$regions) > 1) {
+    per_region <- tapply(series$confirm, series$region, function(x) c(n = length(x), total = sum(x)))
+    sparse <- names(per_region)[vapply(per_region, function(x) x[["n"]] < 21 || x[["total"]] < 50, logical(1))]
+    if (length(sparse) > 0) {
+      cat(sprintf("\nWarning: %d region(s) have under 21 days or under 50 total cases: %s\n",
+                  length(sparse), paste(sparse, collapse = ", ")))
+      cat("Fitting these separately is unlikely to converge. Drop them, or pool with --pool.\n")
+    }
+  }
+
+  dir.create(dirname(cases_out), showWarnings = FALSE, recursive = TRUE)
+  write.csv(series, cases_out, row.names = FALSE)
+  write_config(cfg, out_path)
+
+  cat("\n=== Proposed specification ===\n\n")
+  print_config_table(cfg)
+
+  review <- config_review_items(cfg)
+  gaps <- config_gaps(cfg)
+  cat(sprintf("\nDaily series written to: %s\n", cases_out))
+  cat(sprintf("Config written to:       %s\n\n", out_path))
+  if (length(review) > 0) {
+    cat("Check these before fitting. Everything else was computed from the data:\n")
+    for (nm in review) {
+      cat(sprintf("  - %s (%s): %s\n", nm, cfg[[nm]]$source,
+                  if (is.null(cfg[[nm]]$evidence)) "" else cfg[[nm]]$evidence))
+    }
+    cat("\n")
+  }
+  if (length(gaps) > 0) {
+    cat(sprintf("fit will refuse until these are set: %s\n", paste(gaps, collapse = ", ")))
+  } else {
+    cat("No required field is missing. Next: fit --config ", out_path, "\n", sep = "")
+  }
+  cat("==============================\n")
+  invisible(cfg)
+}
+
 # Main dispatcher
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) == 0) {
   cat("EpiNow2 routine surveillance nowcast CLI\n\n")
   cat("Subcommands:\n\n")
+  cat("  init           Inspect data, work out what can be worked out, and write a\n")
+  cat("                 config file recording where every value came from.\n")
+  cat("    --data <path>            Input CSV (linelist or daily counts).\n")
+  cat("    --out <path>             Config to write (default nowcast.yaml).\n")
+  cat("    --cases-out <path>       Cleaned daily series (default outputs/cases.csv).\n")
+  cat("    --disease <str>          Look up published parameters for this disease.\n")
+  cat("    --date-column <col>      Use this date column instead of the most complete.\n")
+  cat("    --date-type <report|onset|specimen|admission>  Settle the date type.\n")
+  cat("    --intervention-dates <str>  Known step changes; selects a random walk.\n\n")
+  cat("  estimate-truncation  Estimate right truncation from data vintages.\n")
+  cat("    --vintages <dir|glob>    Two or more CSV snapshots of the same series.\n")
+  cat("    --config <path>          Write the fitted distribution into this config.\n")
+  cat("    --seed <int>  --cores <int>\n\n")
   cat("  triage         Inspect surveillance data and recommend a delay structure.\n")
   cat("    --data <path>            Input CSV (linelist or daily counts).\n")
   cat("    --cases-out <path>       Write cleaned daily counts (date, confirm).\n")
@@ -998,6 +1973,9 @@ if (length(args) == 0) {
   cat("    --dist <lognormal|gamma> Distribution family (default lognormal).\n")
   cat("    --seed <int>  --cores <int>\n\n")
   cat("  fit            Fit the renewal model.\n")
+  cat("    --config <path>          Read the specification from a config file.\n")
+  cat("                             Explicit flags below override it.\n")
+  cat("    --pool                   Sum regions into one series before fitting.\n")
   cat("    --data <path>            Daily counts with 'date' and 'confirm'.\n")
   cat("    --gt-substituted         Record that the generation time is a serial\n")
   cat("                             interval, carried into the report's caveats.\n")
@@ -1010,6 +1988,7 @@ if (length(args) == 0) {
   cat("    --rw <int>               Random walk step in days (overrides GP).\n")
   cat("    --gp-ls <num>            GP length scale in days; must be >= 7.\n")
   cat("    --allow-short-gp         Override the length scale guard.\n")
+  cat("    --dry-run                Print the resolved specification, fit nothing.\n")
   cat("    --trunc-dist <none|lognormal|gamma>  Right-truncation adjustment.\n")
   cat("    --trunc-mean/-sd/-max <num>\n")
   cat("    --seed <int>  --cores <int>  --output-dir <dir>\n\n")
@@ -1026,7 +2005,11 @@ if (length(args) == 0) {
 params <- parse_args(args)
 subcmd <- params[["subcommand"]]
 
-if (identical(subcmd, "triage") || identical(subcmd, "describe")) {
+if (identical(subcmd, "init")) {
+  cmd_init(params)
+} else if (identical(subcmd, "estimate-truncation")) {
+  cmd_estimate_truncation(params)
+} else if (identical(subcmd, "triage") || identical(subcmd, "describe")) {
   cmd_triage(params)
 } else if (identical(subcmd, "lookup-delay")) {
   cmd_lookup_delay(params)

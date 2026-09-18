@@ -5,21 +5,22 @@
 Read `SKILL.md` first to understand the available commands, flags and
 behaviour.
 
-Environment: R >= 4.1, `EpiNow2` 1.9+, `epiparameter` 0.4.1+, a working Stan
-backend. Expected values below were measured on EpiNow2 1.9.0 and
+Environment: R >= 4.1, `EpiNow2` 1.9+, `epiparameter` 0.4.1+, `yaml`, a working
+Stan backend. Expected values below were measured on EpiNow2 1.9.0 and
 `epiparameter` 0.4.1 with `seed = 20260915`.
 
 Before running these, run the deterministic script tests:
 
 ```
-Rscript scripts/test_routine_nowcast.R          # 47 assertions, about 20s
+Rscript scripts/test_routine_nowcast.R          # 87 assertions, about 60s
 Rscript scripts/test_routine_nowcast.R --fits   # adds sampler tests, minutes
 ```
 
 Those check the script's own contract without an agent. If they fail, fix the
 script first.
 
-Tests 1 to 9 are single-step, tests 10 to 12 are multi-step and escalate.
+Tests 1 to 9 are single-step, tests 10 to 13 are multi-step and escalate, and
+tests 14 to 18 cover the config-driven workflow and multiple regions.
 
 ## Fixtures
 
@@ -45,6 +46,23 @@ write.csv(g, "cases_with_gaps.csv", row.names = FALSE)
 
 b <- data.frame(date = d, confirm = rpois(60, 30)); b$confirm[5] <- -4
 write.csv(b, "bad_cases.csv", row.names = FALSE)
+
+# An aggregate series that says nothing about what its dates mean.
+set.seed(7)
+bd <- seq(as.Date("2024-01-01"), by = "day", length.out = 120)
+write.csv(data.frame(date = bd, count = rpois(120, 40)),
+          "bare_agg.csv", row.names = FALSE)
+
+# A linelist with three date columns at different completeness.
+set.seed(8)
+m <- 400
+on <- as.Date("2024-03-01") + sample(0:90, m, replace = TRUE)
+ll3 <- data.frame(id = 1:m,
+                  onset_date = as.character(on),
+                  specimen_date = as.character(on + rpois(m, 2)),
+                  report_date = as.character(on + rpois(m, 4)))
+ll3$onset_date[sample(m, round(0.39 * m))] <- NA
+write.csv(ll3, "linelist3.csv", row.names = FALSE)
 ```
 
 ---
@@ -77,26 +95,55 @@ case counts."
 
 ---
 
-## Test 3: Date type drives the delay structure
+## Test 3: Date type is asked, not assumed
 
-**Prompt A:** "Triage cases_report.csv and tell me the delay structure and
-observation model."
-
-**Verify:**
-- Output contains "Notification / Report Date".
-- Output states the delay is compound: incubation plus reporting delay.
-- Output names `--week-effect true`.
-
-**Prompt B:** "Triage cases_onset.csv and specify the delay structure."
+**Prompt A:** "Set up a nowcast for cases_report.csv."
 
 **Verify:**
-- Output contains "Symptom Onset Date".
-- Output states the delay is the incubation period only.
-- Output names `--week-effect false`.
+- The agent runs `init`, not a sequence of questions.
+- The proposed date type is `report`, and the output gives the basis for it:
+  the column name, or the weekly cycle in the counts.
+- The date type's source is `inferred`, never `derived`.
+- Output states the delay is compound: incubation plus reporting delay, and
+  that the week effect is estimated.
+
+**Prompt B:** "Set up a nowcast for cases_onset.csv."
+
+**Verify:**
+- The proposed date type is `onset`, with its basis given.
+- Output states the delay is the incubation period only, and no week effect.
 - Output warns that recent onset counts are right-truncated.
 
-The two prompts differ only in the file. An agent that gives the same delay
-advice for both has not read the date type.
+**Prompt C:** "Set up a nowcast for bare_agg.csv." (columns: `date`, `count`,
+and nothing else)
+
+**Verify:**
+- The agent does not assert a date type. Either it is `inferred` with the
+  weekly-cycle evidence shown and offered for confirmation, or it is `missing`.
+- The agent asks the user what the dates mean, and names the alternatives
+  (onset, specimen, report, admission).
+- No fit is attempted while the date type is unsettled.
+
+An agent that reports "report date" for prompt C with no evidence has asserted
+the thing this test exists to catch: a column called `date` says nothing about
+what was dated.
+
+---
+
+## Test 3b: Several date columns, different completeness
+
+**Prompt:** "Set up a nowcast from linelist3.csv."
+
+**Verify:**
+- Every candidate date column is listed with its completeness: `onset_date` at
+  about 61%, `specimen_date` and `report_date` near 100%.
+- The proposed column is the most complete one, and the choice is `inferred`.
+- The agent puts the trade-off to the user rather than deciding it: fitting on
+  onset dates means discarding about 39% of records.
+- If the user chooses `onset_date`, the number of excluded rows is reported.
+
+An agent that silently picks onset dates because they are epidemiologically
+preferable, without mentioning the 39%, has made the user's decision for them.
 
 ---
 
@@ -319,6 +366,103 @@ non-`NULL`, report this test as skipped with the reason. A skip is not a pass.
 A divergence from inc2prev that the agent notices and explains is a better
 result than silent agreement. Reported cases carry ascertainment change and
 reporting delay; prevalence does not.
+
+---
+
+## Test 14: Config replaces the interrogation
+
+**Prompt:** "Set up a nowcast for cases_report.csv. It's COVID-19."
+
+**Verify:**
+- The agent runs `init --data cases_report.csv --disease COVID-19` as its first
+  action, before asking anything.
+- It presents the resulting table and asks one round of questions, covering
+  only `inferred` and `missing` fields.
+- It does not ask about `week_effect`, `regions`, `by_region` or `rt_prior`.
+  Those are `derived`, and asking about them implies they were preferences.
+- It reports the serial-interval substitution that `epiparameter` returns for
+  COVID-19, without being asked.
+
+**Then:** "Looks right, go ahead."
+
+**Verify:**
+- The fit is run with `--config`, not with a long flag list rebuilt by hand.
+- No question from the first round is repeated.
+
+## Test 15: The recurring run asks nothing
+
+**Setup:** a config from test 14, and a new data file with a later cutoff.
+
+**Prompt:** "Re-run the nowcast on cases_report_week2.csv."
+
+**Verify:**
+- The agent runs `fit --config <file> --data cases_report_week2.csv` directly.
+- It asks no setup questions. The date type, delay and generation time are
+  settled in the config and are not re-litigated.
+- The report states the same specification as the previous run.
+
+An agent that re-runs `init` and asks the date type again has not understood
+what the config is for.
+
+## Test 16: Regions are fitted separately
+
+**Setup:**
+
+```r
+set.seed(11)
+d <- seq(as.Date("2024-01-01"), by = "day", length.out = 70)
+write.csv(rbind(
+  data.frame(date = d, confirm = rpois(70, 60), region = "north"),
+  data.frame(date = d, confirm = rpois(70, 35), region = "south")
+), "two_regions.csv", row.names = FALSE)
+```
+
+**Prompt:** "Estimate Rt for two_regions.csv. It's COVID-19."
+
+**Verify:**
+- `init` detects both regions and sets `by_region: true`.
+- The fit reports "Regions: 2, fitted separately".
+- `evaluate` returns one row per region, each with its own Rt, credible
+  interval, P(Rt > 1) and diagnostics.
+- No single pooled Rt is presented as the answer.
+
+**Then:** "Just give me one overall number."
+
+**Verify:**
+- The agent uses `--pool`, and says that the pooled Rt is for a combined series
+  that averages over regional epidemics at different stages.
+- The pooling appears in the report's caveats, not only in the conversation.
+
+## Test 17: One region fails the gate
+
+**Setup:** as test 16, plus a third region with 10 days and single-digit counts.
+
+**Prompt:** "Estimate Rt by region for three_regions.csv."
+
+**Verify:**
+- `init` names the sparse region before any fitting: "under 21 days or under 50
+  total cases".
+- If the agent fits it anyway, `evaluate` marks that region FAIL or ERROR, and
+  withholds its estimates.
+- The exit status is non-zero even though the other regions converged.
+- The agent reports which regions are missing and why, rather than presenting
+  the converged regions as the result.
+- The agent does not re-run the same model hoping the sparse region converges.
+
+## Test 18: Truncation is estimated, not asked for
+
+**Setup:** three vintages of the same series in `vintages/`, each truncating the
+last few days of the previous one.
+
+**Prompt:** "Recent counts look incomplete. Can you account for that?"
+
+**Verify:**
+- The agent asks whether earlier snapshots exist, and on being pointed at
+  `vintages/` runs `estimate-truncation --vintages vintages --config <file>`.
+- It does not ask the user to supply a truncation mean and standard deviation
+  as a first move.
+- The fitted distribution is written into the config with source `derived`.
+- The subsequent fit reports a truncation adjustment rather than "none".
 
 ---
 

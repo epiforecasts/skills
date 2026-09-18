@@ -1,13 +1,17 @@
 ---
 name: epinow2-routine-nowcast
-description: Interactive EpiNow2 workflow for estimating the time-varying reproduction number (Rt) and producing nowcast reports from routine surveillance data. Guides the user through delay structure, transmission dynamics and truncation choices, then fits and evaluates the model.
+description: EpiNow2 workflow for estimating the time-varying reproduction number (Rt) and producing nowcast reports from routine surveillance data, one region or many. Works out the delay structure, transmission dynamics and truncation it can from the data, records where every value came from, and puts the rest to the user before fitting and evaluating.
 ---
 
 # Skill: EpiNow2 routine nowcast
 
 **Purpose:** Set up, run and evaluate a routine surveillance nowcast using the
-`EpiNow2` R package, with the modelling choices made explicitly by the user
-rather than silently defaulted.
+`EpiNow2` R package, with every modelling choice either computed from the data
+or made explicitly by the user, and never silently defaulted.
+
+The specification lives in a config file. `init` writes it, the user corrects
+it once, `fit` consumes it. A recurring nowcast re-runs `fit --config` with no
+questions at all.
 
 ---
 
@@ -15,8 +19,10 @@ rather than silently defaulted.
 
 Invoke this skill when the user wants to:
 
-- Estimate Rt or nowcast infections from a case time series.
+- Estimate Rt or nowcast infections from a case time series, for one area or
+  for several at once.
 - Decide the delay structure for surveillance data by report or onset date.
+- Re-run an existing configuration on new data.
 - Evaluate whether an existing EpiNow2 fit is fit to report.
 
 ---
@@ -28,9 +34,11 @@ In scope:
 - Triage of case data (linelist or daily counts) and delay structure advice.
 - Retrieval of published delay parameters from `epiparameter`.
 - Estimation of a delay distribution from the user's own linelist.
-- A single renewal model fit with user-specified transmission and delay
-  parameters.
-- A convergence-gated report of Rt, growth rate and nowcast infections.
+- Estimation of right truncation from data vintages, where the user has them.
+- A renewal model fit with user-specified transmission and delay parameters,
+  fitted per region when the data carries regions.
+- A convergence-gated report of Rt, growth rate and nowcast infections, gated
+  per region.
 
 Not in scope. Decline these and say why:
 
@@ -52,12 +60,18 @@ Not in scope. Decline these and say why:
 R with `EpiNow2` (1.9+), `epiparameter`, and a working Stan backend. The
 script is `scripts/routine_nowcast.R`. Call it with `Rscript` directly.
 
+It also needs the `yaml` package to read and write config files.
+
 Subcommands:
 
+- `init --data <path> [--disease <str>]` inspects the data, works out what it
+  can, and writes a config recording the provenance of every value.
 - `triage --data <path>` inspects the data and recommends a delay structure.
 - `lookup-delay --disease <str> --param <str>` queries `epiparameter`.
 - `estimate-delay --delays <csv>` fits a delay distribution to event pairs.
-- `fit --data <path> [options]` fits the renewal model.
+- `estimate-truncation --vintages <dir>` estimates right truncation from
+  snapshots of the same series taken on different days.
+- `fit --config <yaml>` fits the renewal model; flags override the config.
 - `evaluate --fit <path>` checks convergence, then reports estimates.
 
 Run `Rscript scripts/routine_nowcast.R` with no arguments for the full
@@ -65,14 +79,15 @@ flag list.
 
 `scripts/test_routine_nowcast.R` checks the script's own behaviour without an
 agent. Run it after changing `routine_nowcast.R`; add `--fits` to include the
-sampler tests, which take minutes.
+sampler and regional tests, which take minutes. 87 assertions without `--fits`,
+117 with.
 
 Model fits take minutes. Start them detached with a log rather than holding the
 session open, then poll the log:
 
 ```
 mkdir -p outputs/logs
-nohup Rscript scripts/routine_nowcast.R fit --data cases.csv \
+nohup Rscript scripts/routine_nowcast.R fit --config nowcast.yaml \
   > outputs/logs/fit_$(date +%F-%H%M).log 2>&1 &
 ```
 
@@ -80,87 +95,92 @@ nohup Rscript scripts/routine_nowcast.R fit --data cases.csv \
 
 ## Instructions
 
-### 1. Determine session state
+### 1. Is there a config already?
 
-Ask: "Are you setting this up for a new dataset, or running an existing
-configuration?"
+Look for a config file (`nowcast.yaml` by default). If one exists and the user
+is re-running on new data, go straight to step 4. A recurring nowcast asks the
+user nothing: the questions were answered when the config was written.
 
-If they are not initialising, go straight to step 5.
+If there is no config, go to step 2.
 
-### 2. Triage the data
+### 2. Build the specification
 
-Run `triage` on their file, with `--cases-out` to write a clean daily series
-and, for a linelist, `--delays-out` to write event date pairs.
+Run `init --data <their file>`, adding `--disease <name>` whenever the pathogen
+is known, so published parameters are fetched in the same pass.
 
-Summarise what it found. Ask whether it looks right, and what the estimate is
-for: current Rt, smoothed incidence, or a nowcast of recent days.
+`init` writes a config in which every field records where its value came from:
 
-Wait for the answer.
+| Source | Meaning | What to do with it |
+| :--- | :--- | :--- |
+| `derived` | Computed from the data, or from another field already settled | Show it. Do not ask about it |
+| `inferred` | Read off evidence that could be wrong; the evidence is printed with it | Put it to the user with its evidence |
+| `user` | Supplied or confirmed by the user | Leave it alone |
+| `missing` | Not obtainable here | Must be filled before `fit` will run |
 
-### 3. Transmission process
+Present the table `init` prints. Do not re-ask what it has already derived.
 
-Ask what the pathogen is and whether they know the generation time.
+### 3. One review, then fill the gaps
 
-If they do not, run `lookup-delay`. It answers in one of three ways, and which
-one it was decides what happens next:
+Ask once, covering only the `inferred` and `missing` fields. In practice that
+is the date type, the generation time, the delay, and sometimes truncation.
 
-- A published generation time, where the database has one. Influenza and
-  chikungunya do; most pathogens do not.
-- The serial interval, flagged as a substitution, where no generation time
-  exists. It is onset-to-onset and, where transmission is pre-symptomatic, more
-  dispersed than the generation time, which biases Rt towards 1. Pass
-  `--gt-substituted` to `fit` so the report carries this, and say so wherever
-  the Rt is reported.
-- Nothing usable, either because no entry exists or because the entry carries
-  no parameters. Stop here and ask the user for parameters. Do not fit.
+The date type is the one to put carefully, because it cannot be derived and
+everything downstream follows from it. An aggregate `date`/`count` series
+carries no evidence of what its dates mean; a column name is a weak hint; a
+weekly cycle in the counts is weak corroboration of an administrative reporting
+date. Show the evidence `init` found, name the alternatives, and let the user
+settle it. For a linelist with several date columns, the completeness figures
+are the deciding fact: fitting on a 61%-complete onset date means fitting on a
+biased subset, and that is the user's call, not the agent's.
+
+Fill the gaps with the tool that suits each one:
+
+- Generation time: `lookup-delay --disease <name> --param 'generation time'`.
+  It answers in one of three ways, and which one decides what happens next:
+  a published generation time, where the database has one (influenza and
+  chikungunya do; most pathogens do not); the serial interval, flagged as a
+  substitution, where no generation time exists; or nothing usable, either
+  because no entry exists or because the entry carries no parameters. On the
+  third, stop and ask the user for parameters. Do not fit.
+- Reporting delay: `estimate-delay` on the user's own linelist is better than
+  a literature default, because it reflects their own surveillance system. Use
+  `triage --delays-out` to write the event pairs it needs.
+- Right truncation: if the user holds earlier snapshots of the same series,
+  `estimate-truncation --vintages <dir> --config <file>` estimates it from the
+  data and writes it in. Ask for the snapshots before asking for a
+  distribution.
+
+A serial interval standing in for a generation time is onset-to-onset and,
+under pre-symptomatic transmission, more dispersed, which biases Rt towards 1.
+`init` records the substitution in the config and `fit` carries it into the
+report's caveats. Say so wherever the Rt is reported.
 
 An entry existing is not the same as a distribution existing. 11 of the 125
 entries in `epiparameter` 0.4.1 carry no parameters.
 
-Then ask whether they expect smooth continuous change, which suits a Gaussian
-process, or discrete steps from policy changes, which suit a random walk.
+Write the user's answers back into the config, and mark what they supplied as
+`user`. Do not re-derive `week_effect` yourself: it follows the date type and
+is recomputed on every read.
 
-Wait for the answer.
+### 4. Fit
 
-### 4. Reporting process and truncation
+Run `fit --config <file>`. Anything passed as a flag overrides the config, so a
+one-off sensitivity run does not require editing the file.
 
-Tell them what the date type implies. Report dates need incubation plus
-reporting delay and a day-of-week effect. Onset dates need incubation only
-and no week effect.
+`fit` refuses to run while a required field is missing, and names the fields.
+Do not fill them with plausible values to get past the refusal. The generation
+time and the delay have no default, because a default is one pathogen's biology
+applied to another, and an Rt computed on the wrong pathogen's parameters is
+not an estimate of anything.
 
-Ask whether they know the delay parameters. If they have a linelist, offer
-`estimate-delay` on the pairs file from step 2, which is better than a
-literature default because it reflects their own surveillance system.
+Where the data carries a `region` column with more than one region, each region
+is fitted separately. Pooling them estimates an Rt for a population that does
+not exist, so it happens only with `--pool`, and is recorded as a caveat.
 
-Ask whether recent counts are systematically incomplete because reporting is
-still in progress. If so, pass a truncation distribution.
+Run the fit detached, as above. Poll the log. Regional fits take proportionally
+longer.
 
-Wait for the answer.
-
-### 5. Fit
-
-Build the `fit` command from the answers. Pass every parameter the user gave:
-
-- `--gt-mean`, `--gt-sd`, `--gt-max`, `--gt-dist` for the generation time.
-- `--delay-mean`, `--delay-sd`, `--delay-max`, `--delay-dist` for the
-  infection-to-observation delay.
-- `--week-effect true|false`, matching the date type from triage.
-- `--rw 7` for a random walk, or `--gp-ls <days>` for a Gaussian process.
-- `--trunc-dist` and its parameters if right truncation applies.
-
-The generation time and the delay are required. There is no default, because a
-default would be some particular pathogen's biology and an Rt computed on the
-wrong pathogen's parameters is not an estimate of anything. If the user does not
-have them, get them: `lookup-delay` for a published estimate, or
-`estimate-delay` on their own linelist. Do not guess values to get past the
-refusal.
-
-Pass `--gt-substituted` whenever the generation time came from a serial
-interval. It is recorded next to the fit and reappears in the report's caveats.
-
-Run the fit detached, as above. Poll the log.
-
-### 6. Evaluate
+### 5. Evaluate
 
 Run `evaluate --fit <path>`.
 
@@ -177,6 +197,14 @@ components being estimated at once.
 On a PASS: report the headline numbers. P(Rt > 1) is computed from the
 posterior draws, so quote it as a probability rather than converting it to a
 verbal category.
+
+A regional fit is gated per region: each region is judged on its own diagnostics
+and reported as one row of a table. Regions that pass are reported; regions that
+fail have their estimates withheld and are listed with the diagnostic that
+failed. The run still exits non-zero if any region failed, because a table with
+a hole in it reads as a table. Say which regions are missing and why, rather
+than presenting the ones that worked as the result. A sparse region is the
+usual cause, so check its counts before changing the model for every region.
 
 A FAIL still writes its report when `--report-out` is set, recording that the
 question was asked and could not be answered. That record is what stops a
@@ -242,5 +270,15 @@ quoted.
 - Ignoring right truncation when the data is a single recent snapshot, which
   produces a spurious decline at the tail.
 - Passing a raw file to `fit`. It needs `date` and `confirm` columns from
-  `triage --cases-out`.
+  `init --cases-out` or `triage --cases-out`.
 - Setting a Gaussian process length scale below 7 days. Use a random walk.
+- Asking the user about a field the config marks `derived`. It was computed
+  from their data; asking implies it was a matter of preference.
+- Presenting an `inferred` field as settled. The date type in particular is a
+  reading of weak evidence, not a finding.
+- Treating a date column as a date type. A column called `date` in an aggregate
+  series says nothing about whether it is onset, specimen or report.
+- Reporting the regions that converged as though they were the answer, when
+  others were withheld.
+- Pooling regions to avoid a sparse-region failure without saying that the
+  resulting Rt is for a population that does not exist.
