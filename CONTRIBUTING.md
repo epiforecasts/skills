@@ -10,15 +10,15 @@
    ```yaml
    ---
    name: epinow2-routine-nowcast
-   description: What the skill does, and when Claude should reach for it. This is the only part
-     Claude reads when deciding whether to load the skill, so name the package, the task and the
+   description: What the skill does, and when an agent should reach for it. This is the only
+     part read when deciding whether to load the skill, so name the package, the task and the
      trigger.
    ---
    ```
 
 3. Keep `SKILL.md` to the workflow itself. Anything long or lookup-shaped goes in
    `skills/<skill-name>/references/`; runnable code goes in `skills/<skill-name>/scripts/`.
-   Reference them by relative path so Claude loads them only when needed.
+   Reference them by relative path so the agent loads them only when needed.
 
 4. Add the skill path to the `skills` array in `.claude-plugin/marketplace.json`, and a row to the
    table in `README.md`.

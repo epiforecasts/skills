@@ -4,7 +4,7 @@
     "name": "epiforecasts"
   },
   "metadata": {
-    "description": "Claude Code skills for epiforecasts tools and workflows",
+    "description": "Agent skills for epiforecasts tools and workflows",
     "version": "0.1.0"
   },
   "plugins": [

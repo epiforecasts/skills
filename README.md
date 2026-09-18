@@ -1,22 +1,24 @@
 # epiforecasts skills
 
-Claude Code skills for working with [epiforecasts](https://github.com/epiforecasts) packages and
-the real-time analysis workflows built around them.
+Agent skills for working with [epiforecasts](https://github.com/epiforecasts) packages and the
+real-time analysis workflows built around them.
 
-A skill is a folder of instructions Claude loads when a task matches its description. Each one
-here lives in `skills/<name>/` with a `SKILL.md` at its root.
+A skill is a folder of instructions a coding agent loads when a task matches its description.
+Each one here lives in `skills/<name>/` with a `SKILL.md` at its root, following the
+[Agent Skills](https://code.claude.com/docs/en/skills) layout.
 
 ## Install
 
-In Claude Code:
+In Claude Code, the repo is a plugin marketplace:
 
 ```
 /plugin marketplace add epiforecasts/skills
 /plugin install epiforecasts
 ```
 
-Skills then load automatically when a task matches. To use a single skill without the plugin,
-copy its folder into `.claude/skills/` in your project.
+Skills then load automatically when a task matches. Otherwise copy the skill folder into
+wherever your agent looks for skills — `.claude/skills/` for Claude Code, and the equivalent
+for other agents that read the same format.
 
 ## Skills
 
