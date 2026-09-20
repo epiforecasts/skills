@@ -9,7 +9,7 @@
 
    ```yaml
    ---
-   name: epinow2-routine-nowcast
+   name: epinow2
    description: What the skill does, and when an agent should reach for it. This is the only
      part read when deciding whether to load the skill, so name the package, the task and the
      trigger.

@@ -14,7 +14,7 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/epinow2-routine-nowcast"
+        "./skills/epinow2"
       ]
     }
   ]
