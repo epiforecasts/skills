@@ -120,7 +120,7 @@ resolve_spec <- function(cfg, params) {
     gt_substituted = flag_true(params, "gt-substituted") || (is.null(dist_value_from_flags(params, "gt", "")) && isTRUE(gt$substituted)),
     inc = dist("incubation", "incubation", "Incubation period"),
     event_delay = ed,
-    truncation = cfg_value(cfg, "truncation"),
+    truncation = dist("trunc", "truncation", "Truncation"),
     rw = if (identical(dyn$type, "rw")) as.integer(dyn$step) else int_flag(params, "rw", 0),
     gp_ls = if (identical(dyn$type, "gp")) as.numeric(dyn$ls) else if (!is.null(params[["gp-ls"]])) as.numeric(params[["gp-ls"]]),
     rt_prior = if (is.list(rt_prior)) rt_prior else NULL,

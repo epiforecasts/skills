@@ -153,6 +153,9 @@ r <- cli("fit", "--data", "clean.csv", "--date-type", "death", "--gt-dist", "wei
 check("a Weibull generation time and death dates resolve, with the ascertainment caveat",
       r$status == 0 && has(r, "GT: +weibull\\(shape = 2\\.360") && has(r, "No delay from onset to death") &&
         has(r, "infections leading to death"), r$text)
+r <- cli("fit", full, "--trunc-mean", "1.5", "--trunc-sd", "0.5", "--trunc-max", "10")
+check("a known truncation can be supplied, not only estimated",
+      r$status == 0 && has(r, "Truncation: +lognormal\\(mean = 1\\.500"), r$text)
 check("a horizon over 14 days is refused", cli("fit", full, "--horizon", "21")$status != 0)
 r <- cli("fit", full, "--gp-ls", "2")
 check("a GP length scale under 7 days is refused, pointing at a random walk", r$status != 0 && has(r, "--rw"))

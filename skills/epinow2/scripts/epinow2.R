@@ -53,7 +53,7 @@ KNOWN_FLAGS <- list(
   `estimate-delay` = c("delays", "dist", "config", "field", STAN_FLAGS),
   `estimate-truncation` = c("vintages", "config", STAN_FLAGS),
   fit = c("config", "data", "date-type", "pool", dist_flags("gt"), "gt-substituted",
-          dist_flags("incubation"), dist_flags("event-delay"), "no-event-delay", "week-effect",
+          dist_flags("incubation"), dist_flags("event-delay"), dist_flags("trunc"), "no-event-delay", "week-effect",
           "r-prior-mean", "r-prior-sd", "rw", "gp-ls", "horizon", "forecast-rt",
           "output-dir", "dry-run", STAN_FLAGS),
   evaluate = c("fit", "date", "report-out")
@@ -204,7 +204,7 @@ HELP <- "EpiNow2 CLI: Rt, nowcasts and short-term forecasts from surveillance co
     --data <path>        With --config, new data in the same layout. Without, a date,
                          confirm (and region) file, as init writes.
     --date-type <event>
-    --gt-*, --incubation-*, --event-delay-*
+    --gt-*, --incubation-*, --event-delay-*, --trunc-*
                          Distributions: -dist (lognormal, gamma, weibull, exp or
                          nonparametric), -max, and the family's parameters: -mean -sd,
                          or -meanlog -sdlog, -shape -scale, -shape -rate, -rate, or

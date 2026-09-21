@@ -15,7 +15,6 @@ analysis in the review; the package documentation covers each option.
 | Rt over the forecast | `latest` or `project` | `estimate`, or a fixed number of days back | `estimate` also holds Rt fixed over the last days of the data (24 on the England window), which changes the nowcast; on England it failed the gate |
 | Observation model | Negative binomial; week effect on or off | Poisson; an ascertainment `scale`; other periodicities (`week_length`) | Defaults suit routine counts; ascertainment is not identifiable from counts alone |
 | Population | Not modelled | Susceptible depletion (`rt_opts(pop = )`) | Matters over long windows or high attack rates, where a 14-day forecast is already out of scope |
-| Truncation | Estimated from snapshots | A known distribution passed to `trunc_opts()` | Can be added to the config by hand as a `user` field |
 | Strata | Fitted separately with one specification, or pooled | Per-stratum settings in `regional_epinow()` | One review covers every stratum |
 | Secondary outcomes | Not covered | `estimate_secondary()`, `forecast_secondary()` | Two series and a chained forecast; see the package vignette |
 | Sampler | Full MCMC, gated on Rhat, ESS and divergences | Variational inference, Laplace, pathfinder; `cmdstanr` | The gate needs MCMC diagnostics |

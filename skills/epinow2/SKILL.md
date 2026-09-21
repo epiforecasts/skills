@@ -130,7 +130,8 @@ Fill each gap in the specification from the best source:
   there instead. Without a linelist, ask. `--no-event-delay` is the user's
   choice to make, recorded as a caveat, not a way past the refusal.
 - Truncation: if the user holds earlier snapshots,
-  `estimate-truncation --vintages <dir> --config <file>`.
+  `estimate-truncation --vintages <dir> --config <file>`. A truncation the
+  user already knows goes in with `--trunc-*`, like any other distribution.
 
 Both estimators apply the convergence gate and write nothing on a failure.
 
