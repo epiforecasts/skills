@@ -13,7 +13,9 @@
       "description": "Skills for epiforecasts packages and real-time analysis workflows",
       "source": "./",
       "strict": false,
-      "skills": []
+      "skills": [
+        "./skills/epinow2"
+      ]
     }
   ]
 }

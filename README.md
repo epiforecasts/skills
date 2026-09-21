@@ -22,7 +22,7 @@ for other agents that read the same format.
 
 | Skill | Package | What it does |
 |---|---|---|
-| | | |
+| [`epinow2`](skills/epinow2) | EpiNow2 | Estimate the time-varying reproduction number, nowcast infections and forecast reported counts up to two weeks ahead from daily or weekly surveillance data or a linelist, making key modelling choices explicit. |
 
 ## Contributing
 
