@@ -22,7 +22,7 @@ for other agents that read the same format.
 
 | Skill | Package | What it does |
 |---|---|---|
-| | | |
+| [outbreak-report](skills/outbreak-report/SKILL.md) | none | Checks a report of a modelled outbreak estimate against sourced reporting items, and offers an alternative for each gap |
 
 ## Contributing
 
