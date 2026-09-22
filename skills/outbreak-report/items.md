@@ -1,21 +1,44 @@
 # Reporting items for a real-time outbreak estimate
 
-A local implementation of relevant reporting guidelines for epidemiological
-modelling: GATHER, EPIFORGE and ISPOR-SMDM Task Force-7. Aimed at real-time
-outbreak reports using continuously updated modelling estimates based on
-refreshed data. Each item states a checkable assertion about the reporting
-item, says which document it belongs to, and names the source.
+Items for reporting a modelled estimate of an outbreak that is recomputed and
+republished as new data arrive. Each item is stated as an assertion about the
+report that can be checked, with the document it belongs to, its sources, and
+the source text.
 
-Ids are stable. Retire an item rather than renumbering.
+Sources are GATHER, EPIFORGE 2020, ISPOR-SMDM Task Force-7, TRACE, ORBIT, the
+WHO rapid risk assessment manual, the PHIA probability yardstick, and three
+studies of how readers use modelled estimates.
+
+Ids are stable and are not the presentation order. Retire an item rather than
+renumbering.
+
+## Gap addressed
+
+Three properties define the scope. No single existing source has all three.
+
+Real-time. GATHER, EPIFORGE and ISPOR-7 assume a document published once. Six
+items here exist because the report is republished: OR-03, OR-04, OR-05,
+OR-11, OR-15 and OR-26.
+
+Synthesis. ORBIT sets a minimum standard for the surveillance counts an
+authority publishes and carries no item on a modelled estimate. GATHER covers
+health estimates without reference to outbreak response. EPIFORGE covers
+forecasting as research rather than as a published report. Each item below
+records which sources support it and where they are silent.
+
+Agentic use. Each item is worded as an assertion about the report, so it can
+be checked by a reader or by an agent against a page.
 
 ## Audience
 
 The primary reader is a technically literate responder or analyst, at a
-national institute, WHO, an NGO or a partner agency, who works with outbreak
-data but does not build models. Secondary readers are modelling peers and the
-press.
+national institute, a ministry, WHO, an NGO or a partner agency, who works
+with outbreak data and does not build models. Secondary readers are modelling
+peers and the press.
 
-This matches GATHER's own split:
+Three references set this audience.
+
+GATHER names two audiences and separates what each needs:
 
 > Reporting of estimates should serve the needs of their two primary
 > audiences: decision makers and researchers. [...] These users need
@@ -26,27 +49,22 @@ This matches GATHER's own split:
 > Researchers require a higher degree of detail about methods, so that they
 > can fully understand and potentially reproduce studies and advance methods.
 
-Tailoring to the audience is itself one of three strategies a rapid scoping
-review of 16 evidence-communication frameworks identified, alongside
-information packaging:
+ISPOR-7 requires the non-technical description to be unrestricted, which sets
+the lower bound on assumed expertise.
 
-> Three primary evidence communication strategies, comprising eleven
-> substrategies, emerged: "Health information packaging", "Targeting and
-> tailoring messages to the audience", and "Combined communication
-> strategies". (Barreto et al. 2024)
-
-That review covers the process of communicating evidence rather than what a
-report must contain, and mentions uncertainty nowhere, so it sources no item
-here.
+Hadley et al. interviewed policy and decision makers and science advisors in
+13 countries about modelled COVID-19 evidence. The reader-side items below
+are drawn from that population, so the audience is defined to match the
+population the evidence was collected from.
 
 ## Two documents
 
-Non-technical: one page for the primary reader, available to anyone.
+Non-technical: one document for the primary reader, available to anyone.
 
 Technical: methods, evaluation and diagnostics, sufficient for a peer to
 reproduce.
 
-The split is ISPOR-7's:
+ISPOR-7 defines the split:
 
 > A nontechnical description should be made available to anyone — including
 > model type and intended applications; funding sources; structure; inputs,
@@ -57,8 +75,7 @@ The split is ISPOR-7's:
 > should be made available openly or under agreements that protect
 > intellectual property.
 
-TRACE gives the reason the split works, which is that readers descend into
-detail only once they have the overview:
+TRACE states the reading behaviour the split assumes:
 
 > Readers will first want to see an overview and only then decide whether and
 > where to go into more detail. Thus, to allow for hierarchical reading and to
@@ -68,46 +85,58 @@ detail only once they have the overview:
 
 ## Index
 
-| Id | Item | Document | Real-time |
+Items are grouped by theme, and within a theme by the number of independent
+sources supporting them. Items with no published source are last within their
+theme. The sources column counts guidelines, with reader studies in brackets.
+
+### Non-technical document
+
+| Id | Item | Sources | Real-time |
 |---|---|---|---|
-| OR-01 | Purpose and intended use | Non-technical | |
-| OR-02 | Quantities defined before use | Non-technical | |
-| OR-03 | Data cut-off | Non-technical | yes |
-| OR-04 | Update cadence | Non-technical | yes |
-| OR-05 | Change since the last update | Non-technical | yes |
-| OR-06 | Headline estimate with one interval | Non-technical | |
-| OR-07 | Non-technical summary of results | Non-technical | |
-| OR-08 | Data sources named | Non-technical | |
-| OR-09 | Known biases in the inputs | Non-technical | |
-| OR-10 | Sources of uncertainty included and excluded | Non-technical | |
-| OR-11 | Predictive performance | Non-technical | yes |
-| OR-12 | Limitations | Non-technical | |
-| OR-13 | Confidence statement | Non-technical | |
-| OR-14 | Implications for action | Non-technical | |
-| OR-15 | Estimates available as data | Non-technical | yes |
-| OR-16 | Code available | Non-technical | |
-| OR-17 | Authorship and funding | Non-technical | |
-| OR-18 | Contact and feedback route | Non-technical | |
-| OR-19 | Methods sufficient to reproduce | Technical | |
-| OR-20 | Model evaluation and comparison | Technical | |
-| OR-21 | Inference diagnostics stay technical | Technical | |
-| OR-22 | Prior sensitivity stays technical | Technical | |
-| OR-23 | Component decomposition stays technical | Technical | |
-| OR-24 | Domain of applicability | Non-technical | |
-| OR-25 | Verbal probability on a defined scale | Non-technical | |
-| OR-26 | Consistent presentation between updates | Non-technical | yes |
+| OR-01 | Purpose and intended use | 4 | |
+| OR-24 | Domain of applicability | 1 | |
+| OR-02 | Quantities defined before use | 1 | |
+| OR-09 | Known biases in the inputs | 2 (1) | |
+| OR-08 | Data sources named | 2 | |
+| OR-06 | Headline estimate with one interval | 2 (3) | |
+| OR-27 | Bounded set of headline estimates | 1 (1) | |
+| OR-10 | Sources of uncertainty included and excluded | 1 | |
+| OR-13 | Confidence statement | 1 | |
+| OR-25 | Verbal probability on a defined scale | 1 | |
+| OR-12 | Limitations | 3 | |
+| OR-07 | Non-technical summary of results | 2 (1) | |
+| OR-14 | Implications for action | 2 | |
+| OR-03 | Data cut-off | 1 | yes |
+| OR-05 | Change since the last update | 1 | yes |
+| OR-26 | Consistent presentation between updates | 0 (1) | yes |
+| OR-04 | Update cadence | 0 | yes |
+| OR-11 | Predictive performance | 2 | yes |
+| OR-16 | Code available | 2 | |
+| OR-15 | Estimates available as data | 2 | yes |
+| OR-17 | Authorship and funding | 2 | |
+| OR-18 | Contact and feedback route | 0 | |
 
-The real-time items exist because the report is republished. The source
-guidelines assume a document published once, and carry only OR-05 among them.
+### Technical document
 
-## Items
+| Id | Item | Sources | Real-time |
+|---|---|---|---|
+| OR-19 | Methods sufficient to reproduce | 4 | |
+| OR-20 | Model evaluation and comparison | 3 | |
+| OR-22 | Prior sensitivity stays technical | 2 | |
+| OR-21 | Inference diagnostics stay technical | 1 | |
+| OR-23 | Component decomposition stays technical | 1 | |
+
+## Scope and purpose
 
 ### OR-01 Purpose and intended use
 
-The report states what the estimate is for and which decisions it is intended
-to support.
+Recommendation: the report states what the estimate is for and which
+decisions it is intended to support.
 
-GATHER item 1, EPIFORGE item 2, TRACE element 1, ISPOR-7.
+Explanation: the intended use determines which quantities are reported and
+which readers the report is written for. All four guidelines place it first.
+
+Sources: GATHER 1, EPIFORGE 2, TRACE 1, ISPOR-7.
 
 > Define the indicator(s), populations (including age, sex, and geographic
 > entities), and time period(s) for which estimates were made. (GATHER 1)
@@ -119,70 +148,87 @@ GATHER item 1, EPIFORGE item 2, TRACE element 1, ISPOR-7.
 > question(s) that should be answered with the model, including a
 > specification of necessary model outputs. (TRACE 1, problem formulation)
 
+### OR-24 Domain of applicability
+
+Recommendation: the report states what the estimate should not be used for,
+and the limits of acceptable extrapolation.
+
+Explanation: the complement of OR-01. No other source in this list states it.
+
+Sources: TRACE 1.
+
+> [...] and a statement of the domain of applicability of the model, including
+> the extent of acceptable extrapolations. (TRACE 1, problem formulation)
+
 ### OR-02 Quantities defined before use
 
-Every reported quantity is defined in words before its first number, including
-the population and geography it covers.
+Recommendation: every reported quantity is defined in words before its first
+number, including the population and geography it covers.
 
-GATHER item 1, as above. The before-first-use ordering is ours.
+Explanation: GATHER 1 requires the definition. The ordering requirement is
+ours, and applies where a report presents tables and figures before the
+narrative that defines them.
 
-### OR-03 Data cut-off
+Sources: GATHER 1, quoted at OR-01. Ordering: ours.
 
-The report states the date the data were current to, and which situation
-report or release that corresponds to.
+## Data and inputs
 
-EPIFORGE item 4.
+### OR-09 Known biases in the inputs
 
-> Identify whether the forecast was performed prospectively, in real time,
-> and/or retrospectively. (EPIFORGE 4)
+Recommendation: the report identifies which input data carry potentially
+important biases.
 
-### OR-04 Update cadence
+Explanation: an estimate cannot be weighed without knowing which inputs are
+systematically wrong and in which direction.
 
-The report states how often it is updated and when the next update is due.
+Sources: GATHER 6, TRACE 3, Hadley et al.
 
-No source found. Ours.
+> Identify and describe any categories of input data that have potentially
+> important biases (e.g., based on characteristics listed in item 5).
+> (GATHER 6)
 
-### OR-05 Change since the last update
+> The quality and sources of numerical and qualitative data used to
+> parameterize the model [...] This critical evaluation will allow model users
+> to assess the scope and the uncertainty of the data and knowledge on which
+> the model is based. (TRACE 3, data evaluation)
 
-The report states how the headline estimate has changed since the previous
-version, and why it changed.
+> in a few countries presenting numbers of cases for example was quickly
+> deemed ineffective, since this metric is not accurate and is heavily
+> dependent [on testing]. (Hadley et al. 2025)
 
-GATHER item 17.
+### OR-08 Data sources named
 
-> Interpret results in light of existing evidence. If updating a previous set
-> of estimates, describe the reasons for changes in estimates. (GATHER 17)
+Recommendation: the report names each data source, who produces it, and the
+period it covers.
 
-GATHER asks for the reason, not only the series.
+Sources: GATHER 5, ORBIT.
+
+> Provide information about all included data sources and their main
+> characteristics. For each data source used, report reference information or
+> contact name/institution, population represented, data collection method,
+> year(s) of data collection, sex and age range, diagnostic criteria or
+> measurement method, and sample size, as relevant. (GATHER 5)
+
+## Estimates and uncertainty
 
 ### OR-06 Headline estimate with one interval
 
-Each headline quantity is given with a single uncertainty interval, whose
-meaning is stated in words at or before first use.
+Recommendation: each headline quantity is given with a single uncertainty
+interval, whose meaning is stated in words at or before first use.
 
-GATHER item 16, EPIFORGE item 14.
+Explanation: the guidelines require an interval and do not specify how many
+levels. Padilla et al. found that readers did not scale trust to interval
+width, and that the display readers trusted most produced the least accurate
+trend predictions. The restriction to one level supports legibility and not
+comprehension.
+
+Sources: GATHER 16, EPIFORGE 14, with reader evidence from Padilla et al.,
+Hadley et al. and McCabe et al. Restriction to one level: ours.
 
 > Report a quantitative measure of the uncertainty of the estimates (e.g.,
 > uncertainty intervals). (GATHER 16)
 
 > Present and explain uncertainty of forecasting results. (EPIFORGE 14)
-
-Neither source specifies a number of levels. The restriction to one for a
-headline quantity is ours, and follows from the audience. McCabe et al. put
-the audience first but themselves use two levels for a trajectory and one for
-the decision-relevant summary:
-
-> The most important considerations when deciding on a data visualisation is
-> knowing who the audiences are and ensuring that key messages can be easily
-> and quickly absorbed. (McCabe et al. 2021)
-
-> Trajectories are summarised using the median with 50% and 95% credible
-> intervals [...] Additionally, we have provided two metrics of importance to
-> decision-makers: the timing and the magnitude of peak ICU bed demand per
-> simulation, presented as point estimates and 95% credible intervals.
-> (McCabe et al. 2021)
-
-Padilla et al. tested this empirically on 1299 participants, and the finding
-cuts both ways:
 
 > participants were most trusting of visualizations that showed less visual
 > information, including a 95% confidence interval, single forecast, and
@@ -194,110 +240,101 @@ cuts both ways:
 > predictions that did not correspond with the actual COVID-19 trend.
 > (Padilla et al. 2023)
 
-Readers did not adjust their trust for interval width, which is the argument
-for showing one interval and naming it. Trust is not accuracy, though, and the
-simplest display produced the worst trend predictions, so this item buys
-legibility rather than comprehension.
-
-Policy and decision makers in 13 countries asked for the same simplicity, and
-named the opposite failure:
-
-> the vast majority of interviewees without prompt first stressed the need for
-> simple graphics. (Hadley et al. 2025)
-
 > diagrams with extremely wide confidence intervals were not helpful, dubbed
 > "crayon diagrams" - diagrams with huge uncertainty that could have been
 > drawn with a crayon. (Hadley et al. 2025)
 
-### OR-07 Non-technical summary of results
+### OR-27 Bounded set of headline estimates
 
-The report summarises the results in non-technical terms, including a
-non-technical interpretation of the uncertainty.
+Recommendation: where the report presents several estimates together, it
+names which of them are headline, keeps that set small and unchanged between
+updates, and presents each in the same form.
 
-EPIFORGE item 15.
+Explanation: a report presenting many quantities at once gives no ordering,
+and a repeat reader cannot tell which quantity to follow. GATHER 1 requires
+each indicator to be defined but does not bound the set. Reader evidence
+supports a small set and a preference for operational quantities over model
+parameters.
 
-> Briefly summarize the results in nontechnical terms, including a
-> nontechnical interpretation of forecast uncertainty. (EPIFORGE 15)
+Sources: GATHER 1, Hadley et al. Bounding the set: ours.
 
-Hadley et al. give the test the summary has to pass, which is that somebody
-who is not a modeller has to be able to say it again:
-
-> Several respondents also identified a focus on whether what modellers
-> explained could be easily explained and translated again by non-modellers.
-> (Hadley et al. 2025)
+> the vast majority of interviewees without prompt first stressed the need for
+> simple graphics. (Hadley et al. 2025)
 
 > oversharing of information (i.e. scientific detail) is perceived as useless
 > to policymakers. (Hadley et al. 2025)
 
-### OR-08 Data sources named
-
-The report names each data source, who produces it, and the period it covers.
-
-GATHER item 5.
-
-> Provide information about all included data sources and their main
-> characteristics. For each data source used, report reference information or
-> contact name/institution, population represented, data collection method,
-> year(s) of data collection, sex and age range, diagnostic criteria or
-> measurement method, and sample size, as relevant. (GATHER 5)
-
-### OR-09 Known biases in the inputs
-
-The report identifies which input data carry potentially important biases.
-
-GATHER item 6.
-
-> Identify and describe any categories of input data that have potentially
-> important biases (e.g., based on characteristics listed in item 5).
-> (GATHER 6)
-
-TRACE element 3 asks for the same judgement, and says who it is for:
-
-> The quality and sources of numerical and qualitative data used to
-> parameterize the model [...] This critical evaluation will allow model users
-> to assess the scope and the uncertainty of the data and knowledge on which
-> the model is based. (TRACE 3, data evaluation)
-
-Some readers act on this by dropping the quantity:
-
-> in a few countries presenting numbers of cases for example was quickly
-> deemed ineffective, since this metric is not accurate and is heavily
-> dependent [on testing]. (Hadley et al. 2025)
+> Streamlining advice by presenting modelling findings in terms of these more
+> operational concepts (doubling time, time to X, hospitalisations, deaths)
+> was preferred in a few different settings. (Hadley et al. 2025)
 
 ### OR-10 Sources of uncertainty included and excluded
 
-The report states which sources of uncertainty the intervals account for, and
-which they do not.
+Recommendation: the report states which sources of uncertainty the intervals
+account for, and which they do not.
 
-GATHER item 13.
+Sources: GATHER 13.
 
 > Describe methods of calculating uncertainty of the estimates. State which
 > sources of uncertainty were, and were not, accounted for in the uncertainty
 > analysis. (GATHER 13)
 
-### OR-11 Predictive performance
+### OR-13 Confidence statement
 
-Where the report forecasts, it states how its previous forecasts performed,
-against a named comparator.
+Recommendation: the report states in one sentence of plain language how much
+confidence to place in the headline estimate.
 
-EPIFORGE items 11 and 12.
+Explanation: the confidence axis, distinct from the likelihood axis at OR-25
+and from the numeric interval at OR-06. WHO assesses a public health risk
+rather than a model estimate, so the descriptive scale transfers and the
+hazard, exposure and context structure does not.
 
-> Describe the forecast accuracy evaluation method used, with justification.
-> (EPIFORGE 11)
+Sources: WHO rapid risk assessment manual. Transfer to a model estimate: ours.
 
-> Where possible, compare model results to a benchmark or other comparator
-> model, with justification of comparator choice. (EPIFORGE 12)
+> It is important to document the risk assessment team's level of confidence
+> in the assessment and the reasons for any limitations. This will depend on
+> the reliability, completeness and quality of the information used, and the
+> underlying assumptions made with respect to the hazard, exposure and
+> context. [...] The degree of confidence can be expressed using a descriptive
+> scale that ranges from very low to very high. (WHO 2012, p23)
 
-EPIFORGE places these in the methods of a study. Surfacing the result in the
-non-technical document is ours, and is what a reader needs in place of
-sampler diagnostics.
+> It should be emphasized that a quantitative risk assessment that uses poor
+> data or inappropriate quantitative techniques can be far less scientific and
+> defensible than a well-structured qualitative assessment. (WHO 2012, p25)
+
+> Whereas probability reflects the likelihood that a statement is true,
+> analytical confidence reflects the soundness and stability of the
+> foundations on which the assessment of likelihood has been made. (PHIA)
+
+### OR-25 Verbal probability on a defined scale
+
+Recommendation: where the report expresses a probability in words, the words
+come from a published scale, and the scale is stated or linked.
+
+Explanation: applies only where the report carries prose, which is OR-07. A
+report of numbers alone does not trigger it. The yardstick is UK intelligence
+practice rather than health reporting. A published scale narrows the spread in
+how readers interpret probability words without closing it.
+
+Sources: PHIA probability yardstick. Transfer to outbreak reporting: ours.
+
+> >0% - ~5%: Remote Chance. ~10% - ~20%: Highly Unlikely. ~25% - ~35%:
+> Unlikely. ~40% - <50%: Realistic Possibility. ~55% - ~75%: Likely or
+> Probable. ~80% - ~90%: Highly Likely. ~95% - <100%: Almost Certain. (PHIA)
+
+> The application of a standard process and terminology reduces or mitigates
+> subjectivity in the evaluation process, enabling consistency in how the
+> relative strengths and limitations of an assessment are identified,
+> explained and communicated. (PHIA)
+
+## Interpretation
 
 ### OR-12 Limitations
 
-The report states its limitations, including the modelling assumptions and
-data limitations that affect interpretation.
+Recommendation: the report states its limitations, including the modelling
+assumptions and data limitations that affect interpretation.
 
-GATHER item 18, EPIFORGE item 17.
+Sources: GATHER 18, EPIFORGE 17, ISPOR-7.
 
 > Discuss limitations of the estimates. Include a discussion of any modelling
 > assumptions or data limitations that affect interpretation of the
@@ -306,82 +343,127 @@ GATHER item 18, EPIFORGE item 17.
 > Describe the weaknesses of the forecast, including weaknesses specific to
 > data quality and methods. (EPIFORGE 17)
 
-### OR-13 Confidence statement
+### OR-07 Non-technical summary of results
 
-The report states in one sentence of plain language how much confidence to
-place in the headline estimate.
+Recommendation: the report summarises the results in non-technical terms,
+including a non-technical interpretation of the uncertainty.
 
-WHO rapid risk assessment manual, section "Level of confidence in the risk
-assessment".
+Explanation: the summary is passed on by readers who are not modellers, so it
+must survive restatement by them.
 
-> It is important to document the risk assessment team's level of confidence
-> in the assessment and the reasons for any limitations. This will depend on
-> the reliability, completeness and quality of the information used, and the
-> underlying assumptions made with respect to the hazard, exposure and
-> context. The more evidence there is to inform the hazard, exposure and
-> context assessments, the greater confidence the team can have in the
-> results. The degree of confidence can be expressed using a descriptive scale
-> that ranges from very low to very high. (WHO 2012, p23)
+Sources: EPIFORGE 15, ISPOR-7, Hadley et al.
 
-The manual assesses a public health risk, not a model estimate, so the
-transfer is ours: the scale carries over, the hazard, exposure and context
-structure does not. WHO also warns against the failure mode this item guards
-against, which is numbers standing in for judgement:
+> Briefly summarize the results in nontechnical terms, including a
+> nontechnical interpretation of forecast uncertainty. (EPIFORGE 15)
 
-> It should be emphasized that a quantitative risk assessment that uses poor
-> data or inappropriate quantitative techniques can be far less scientific and
-> defensible than a well-structured qualitative assessment. (WHO 2012, p25)
-
-This item is the confidence axis, not the likelihood axis. The two are
-separate and are routinely conflated. See OR-25.
-
-> Whereas probability reflects the likelihood that a statement is true,
-> analytical confidence reflects the soundness and stability of the
-> foundations on which the assessment of likelihood has been made. (PHIA)
+> Several respondents also identified a focus on whether what modellers
+> explained could be easily explained and translated again by non-modellers.
+> (Hadley et al. 2025)
 
 ### OR-14 Implications for action
 
-The report comments on what its results imply for public health action and
-decision-making.
+Recommendation: the report states what its results imply for public health
+action and decision-making.
 
-EPIFORGE item 18, WHO rapid risk assessment manual.
+Explanation: WHO pairs the confidence statement at OR-13 with the
+recommendation in a single step.
+
+Sources: EPIFORGE 18, WHO rapid risk assessment manual.
 
 > If the research is applicable to a specific epidemic, comment on its
 > potential implications and impact for public health action and
 > decisionmaking. (EPIFORGE 18)
-
-WHO pairs the confidence statement with the recommendation, in the same step:
 
 > Undertake a full risk assessment and state the level of confidence in the
 > assessment. Provide recommendations for decision-makers, including which
 > actions should be taken and which should have the highest priority.
 > (WHO 2012, p7)
 
-Hadley et al. found the implication is carried by the choice of quantity, not
-only by a closing paragraph:
+## Currency and change
 
-> Streamlining advice by presenting modelling findings in terms of these more
-> operational concepts (doubling time, time to X, hospitalisations, deaths)
-> was preferred in a few different settings. (Hadley et al. 2025)
+### OR-03 Data cut-off
 
-### OR-15 Estimates available as data
+Recommendation: the report states the date the data were current to, and
+which situation report or release that corresponds to.
 
-The published estimates are downloadable in a format data can be extracted
-from, carrying a version or timestamp.
+Sources: EPIFORGE 4.
 
-GATHER item 15, EPIFORGE item 16.
+> Identify whether the forecast was performed prospectively, in real time,
+> and/or retrospectively. (EPIFORGE 4)
 
-> Provide published estimates in a file format from which data can be
-> efficiently extracted. (GATHER 15)
+### OR-05 Change since the last update
 
-> If results are published as a data object, encourage a time-stamped version
-> number. (EPIFORGE 16)
+Recommendation: the report states how the headline estimate has changed since
+the previous version, and why it changed.
+
+Explanation: GATHER requires the reason, not only the series of past
+estimates.
+
+Sources: GATHER 17.
+
+> Interpret results in light of existing evidence. If updating a previous set
+> of estimates, describe the reasons for changes in estimates. (GATHER 17)
+
+### OR-26 Consistent presentation between updates
+
+Recommendation: successive updates keep the same quantities, in the same
+order, in the same format, and say so when that changes.
+
+Explanation: no guideline carries this item, because a document published once
+cannot be inconsistent with itself. It constrains every other item, since a
+change made to satisfy one breaks continuity with the previous edition. OR-05
+is the resolution.
+
+Sources: Hadley et al.
+
+> Lastly, interviewees agreed that consistency in colours, styles, graphs etc.
+> is important. "Be consistent with the way you packaged the first
+> information". Presenting in the same format each week enabled policymakers
+> and advisors to gain familiarity and to provide a pattern of feedback.
+> (Hadley et al. 2025)
+
+### OR-04 Update cadence
+
+Recommendation: the report states how often it is updated and when the next
+update is due.
+
+Explanation: without a cadence a reader cannot tell whether a number is
+current. No published source found.
+
+Sources: none. Ours.
+
+## Performance
+
+### OR-11 Predictive performance
+
+Recommendation: where the report forecasts, it states how its previous
+forecasts performed, against a named comparator.
+
+Explanation: EPIFORGE places the evaluation in the methods of a study.
+Surfacing the result in the non-technical document is ours. TRACE separates
+agreement with the data used in fitting from comparison against data not used,
+and only the second is evidence of prediction.
+
+Sources: EPIFORGE 11, EPIFORGE 12, TRACE 8. Placement in the non-technical
+document: ours.
+
+> Describe the forecast accuracy evaluation method used, with justification.
+> (EPIFORGE 11)
+
+> Where possible, compare model results to a benchmark or other comparator
+> model, with justification of comparator choice. (EPIFORGE 12)
+
+> How model predictions compare to independent data and patterns that were not
+> used, and preferably not even known, while the model was developed,
+> parameterized, and verified. (TRACE 8, model output corroboration)
+
+## Access
 
 ### OR-16 Code available
 
-The analysis code is accessible, and the report says where.
+Recommendation: the analysis code is accessible, and the report says where.
 
-GATHER item 14, EPIFORGE item 9.
+Sources: GATHER 14, EPIFORGE 9.
 
 > State how analytic or statistical source code used to generate estimates
 > can be accessed. (GATHER 14)
@@ -389,27 +471,45 @@ GATHER item 14, EPIFORGE item 9.
 > Make the model code available, or document the reasons why this was not
 > possible. (EPIFORGE 9)
 
+### OR-15 Estimates available as data
+
+Recommendation: the published estimates are downloadable in a format data can
+be extracted from, carrying a version or timestamp.
+
+Sources: GATHER 15, EPIFORGE 16.
+
+> Provide published estimates in a file format from which data can be
+> efficiently extracted. (GATHER 15)
+
+> If results are published as a data object, encourage a time-stamped version
+> number. (EPIFORGE 16)
+
 ### OR-17 Authorship and funding
 
-The report names its authors and its funding sources.
+Recommendation: the report names its authors and its funding sources.
 
-GATHER item 2, ISPOR-7.
+Sources: GATHER 2, ISPOR-7.
 
 > List the funding sources for the work. (GATHER 2)
 
 ### OR-18 Contact and feedback route
 
-The report says how to raise a correction or a question, and with whom.
+Recommendation: the report states how to raise a correction or a question,
+and with whom.
 
-No source found. Ours. GATHER 5 requires a contact for data that cannot be
-shared, which is a narrower case.
+Explanation: no published source found. GATHER 5 requires a contact for data
+that cannot be shared, which is a narrower case.
+
+Sources: none. Ours.
+
+## Technical document
 
 ### OR-19 Methods sufficient to reproduce
 
-The technical document describes every step of the analysis, including the
-mathematics, in enough detail to reproduce it.
+Recommendation: the technical document describes every step of the analysis,
+including the mathematics, in enough detail to reproduce it.
 
-GATHER item 10, EPIFORGE item 3, ISPOR-7, TRACE.
+Sources: GATHER 10, EPIFORGE 3, ISPOR-7, TRACE 2.
 
 > Provide a detailed description of all steps of the analysis, including
 > mathematical formulae. This description should cover, as relevant, data
@@ -424,10 +524,10 @@ GATHER item 10, EPIFORGE item 3, ISPOR-7, TRACE.
 
 ### OR-20 Model evaluation and comparison
 
-The technical document reports how the model was evaluated and how it compares
-with other published estimates.
+Recommendation: the technical document reports how the model was evaluated
+and how it compares with other published estimates.
 
-GATHER items 11 and 12, EPIFORGE item 10, TRACE.
+Sources: GATHER 11, GATHER 12, EPIFORGE 10, TRACE 6, TRACE 8.
 
 > Describe how candidate models were evaluated and how the final model(s) were
 > selected. (GATHER 11)
@@ -437,106 +537,40 @@ GATHER items 11 and 12, EPIFORGE item 10, TRACE.
 
 > Describe the model validation, and justify the approach. (EPIFORGE 10)
 
-TRACE separates fit from independent corroboration, and only the second is
-evidence the model predicts:
-
 > (1) How well model output matches observations and (2) how much calibration
 > and effects of environmental drivers were involved in obtaining good fits of
 > model output and data. (TRACE 6, model output verification)
 
-> How model predictions compare to independent data and patterns that were not
-> used, and preferably not even known, while the model was developed,
-> parameterized, and verified. (TRACE 8, model output corroboration)
+## Exclusions
 
-### OR-21 Inference diagnostics stay technical
-
-Sampler diagnostics do not appear in the non-technical document.
-
-ISPOR-7, by exclusion. Its non-technical list is closed and contains no
-diagnostic of the fitting algorithm. No source guideline asks for one in a
-document written for decision makers.
+These items state what the non-technical document does not contain. Each is
+supported by exclusion: the ISPOR-7 non-technical list is closed and contains
+no such entry.
 
 ### OR-22 Prior sensitivity stays technical
 
-Prior-data conflict diagnostics do not appear in the non-technical document.
+Recommendation: prior-data conflict diagnostics do not appear in the
+non-technical document.
 
-ISPOR-7, by exclusion, as above. GATHER 12 places sensitivity analysis results
-in the methods and results of the study, not in the non-technical summary.
-TRACE puts sensitivity in its own technical element:
+Sources: ISPOR-7 by exclusion, GATHER 12, TRACE 7.
 
 > (1) How sensitive model output is to changes in model parameters
 > (sensitivity analysis), and (2) how well the emergence of model output has
 > been understood. (TRACE 7, model analysis)
 
+### OR-21 Inference diagnostics stay technical
+
+Recommendation: sampler diagnostics do not appear in the non-technical
+document.
+
+Sources: ISPOR-7 by exclusion.
+
 ### OR-23 Component decomposition stays technical
 
-Per-stream or per-component decompositions do not appear in the non-technical
-document, beyond a link.
+Recommendation: per-stream or per-component decompositions do not appear in
+the non-technical document, beyond a link.
 
-ISPOR-7, by exclusion. Ours in its specific form.
-
-### OR-24 Domain of applicability
-
-The report states what the estimate should not be used for, and the limits of
-acceptable extrapolation.
-
-TRACE element 1.
-
-> [...] and a statement of the domain of applicability of the model, including
-> the extent of acceptable extrapolations. (TRACE 1, problem formulation)
-
-No other source in this list carries this. It is the only item that tells a
-reader where to stop.
-
-### OR-25 Verbal probability on a defined scale
-
-Where the report expresses a probability in words, the words come from a
-published scale, and the scale is stated or linked.
-
-PHIA probability yardstick, seven bands:
-
-> >0% - ~5%: Remote Chance. ~10% - ~20%: Highly Unlikely. ~25% - ~35%:
-> Unlikely. ~40% - <50%: Realistic Possibility. ~55% - ~75%: Likely or
-> Probable. ~80% - ~90%: Highly Likely. ~95% - <100%: Almost Certain. (PHIA)
-
-> The application of a standard process and terminology reduces or mitigates
-> subjectivity in the evaluation process, enabling consistency in how the
-> relative strengths and limitations of an assessment are identified,
-> explained and communicated. (PHIA)
-
-This is the likelihood axis. OR-13 is the confidence axis, and OR-06 is the
-numeric interval on a quantity. Three different things.
-
-The item binds only once a report carries plain-language prose, which is
-OR-07. A report of numbers alone never triggers it.
-
-Two caveats, both ours. The yardstick is UK intelligence practice, not health
-reporting, so the transfer is an argument rather than a precedent. And a
-published scale narrows the spread in how readers interpret probability words
-without closing it, so a band is a discipline on the writer more than a
-guarantee about the reader.
-
-### OR-26 Consistent presentation between updates
-
-Successive updates keep the same quantities, in the same order, in the same
-format, and say so when that changes.
-
-Hadley et al. 2025.
-
-> Lastly, interviewees agreed that consistency in colours, styles, graphs etc.
-> is important. "Be consistent with the way you packaged the first
-> information". Presenting in the same format each week enabled policymakers
-> and advisors to gain familiarity and to provide a pattern of feedback.
-> (Hadley et al. 2025)
-
-This is the only item sourced to evidence gathered from readers of real
-outbreak reports rather than from a guideline committee. It exists because the
-report is republished: a document published once cannot be inconsistent with
-itself.
-
-It pulls against every other item here, since each change to satisfy one of
-them breaks continuity with the last edition. The resolution is OR-05, which
-requires the report to say what changed.
+Sources: ISPOR-7 by exclusion. Specific form: ours.
 
 ## Sources
 
@@ -553,64 +587,36 @@ ISPOR-7. Eddy DM, Hollingworth W, Caro JJ, et al. Model Transparency and
 Validation: A Report of the ISPOR-SMDM Modeling Good Research Practices Task
 Force-7. Value in Health 2012;15(6):843-850. Quotation is from the abstract.
 
-ORBIT. Gregoire V, Zhu AW, Haines CA, Rivers CM. Public reporting guidelines
-for outbreak data. Public Health 2026. 9 items, Delphi. Bounds this list
-rather than overlapping it: it covers surveillance counts an authority
-publishes and contains no item on model-derived estimates.
-
-WHO. Rapid Risk Assessment of Acute Public Health Events. Geneva: World Health
-Organization, 2012. WHO/HSE/GAR/ARO/2012.1, 44 pages. Quotations are from the
-sections "Level of confidence in the risk assessment" and "Quantification in
-risk assessment", and from the response-actions table. Assesses a public
-health risk rather than a model estimate, so it is cited for the confidence
-scale and its pairing with recommended actions, not for its assessment
-structure.
-
 TRACE. Grimm V, Augusiak J, Focks A, et al. Towards better modelling and
 decision support: Documenting model development, testing, and analysis using
-TRACE. Ecological Modelling 2014;280:129-139. Eight elements of model
-documentation. Quotations are from Table 1.
+TRACE. Ecological Modelling 2014;280:129-139. Eight elements. Quotations are
+from Table 1.
+
+ORBIT. Gregoire V, Zhu AW, Haines CA, Rivers CM. Public reporting guidelines
+for outbreak data. Public Health 2026. 9 items, Delphi. Covers the
+surveillance counts an authority publishes and carries no item on a modelled
+estimate.
+
+WHO. Rapid Risk Assessment of Acute Public Health Events. Geneva: World Health
+Organization, 2012. WHO/HSE/GAR/ARO/2012.1. Quotations are from the sections
+"Level of confidence in the risk assessment" and "Quantification in risk
+assessment", and from the response-actions table.
 
 PHIA. Professional Head of Intelligence Assessment probability yardstick, in
 Explaining uncertainty in UK intelligence assessment. UK Government. Seven
 probability bands, and the distinction between probability and analytical
-confidence. UK intelligence practice rather than health reporting, so the
-transfer is argued at OR-25 rather than assumed.
+confidence.
 
 Hadley L, Kremer P, Pulford J, et al. Visual preferences for communicating
 modelling: a global analysis of COVID-19 policy and decision makers. medRxiv
 2025, 10.1101/2024.11.05.24316774. Interviews with policy and decision makers
-and science advisors in 13 countries. Preprint. Sources OR-26 and supports
-OR-06, OR-07, OR-09 and OR-14.
+and science advisors in 13 countries. Preprint.
 
 Padilla L, Hosseinpour H, Fygenson R, et al. Multiple Forecast Visualizations:
 trade-offs in trust and performance in multiple COVID-19 forecast
 visualizations. IEEE Transactions on Visualization and Computer Graphics 2023.
-Three studies, 1299 participants. Cited at OR-06 for both its finding and its
-counter-finding.
-
-Barreto JOM, et al. Research evidence communication for policy-makers: a rapid
-scoping review on frameworks, guidance and tools. 2024. 16 frameworks for the
-process of communicating evidence. Cited in the audience section only. It
-sources no item, because it covers how communication is organised rather than
-what a report contains, and does not mention uncertainty.
+Three studies, 1299 participants.
 
 McCabe R, Kont MD, Schmit N, et al. Communicating uncertainty in epidemic
-models. Epidemics 2021;37:100520. A commentary rather than a checklist, so it
-is cited for its reasoning about audience and presentation, not as the source
-of an item.
-
-## What this list does not cover
-
-Surveillance counts an authority publishes. That is ORBIT, which reached
-consensus on nine items and is the standard to follow for those.
-
-> The Delphi process yielded nine core reporting items representing a minimum
-> standard for public outbreak reporting: numbers of new confirmed cases, new
-> hospital admissions, new deaths, cumulative confirmed cases, cumulative
-> hospital admissions, and cumulative deaths, each reported weekly and at
-> Administrative Level 1 (typically state or province), and stratified by sex,
-> age group, and race/ethnicity. (ORBIT abstract)
-
-Prose style. Where a report carries its own writing conventions, those take
-precedence over anything implied here.
+models. Epidemics 2021;37:100520. A commentary, cited for its reasoning about
+audience and presentation.
