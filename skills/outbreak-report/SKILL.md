@@ -1,6 +1,6 @@
 ---
 name: outbreak-report
-description: Check a published or draft report of a modelled outbreak estimate (nowcast, forecast, outbreak size, reproduction number) that is republished as data arrive, against a sourced list of reporting items drawn from GATHER, EPIFORGE, ISPOR-7 and TRACE. Returns which items are met, with evidence from the report, and offers an alternative wording or layout for each gap. Use when reviewing a situation report, dashboard or summary page that presents model estimates to responders.
+description: Check a published or draft report of a modelled outbreak estimate (nowcast, forecast, outbreak size, reproduction number) that is republished as data arrive, against a sourced list of reporting items drawn from GATHER, EPIFORGE, ISPOR-7, TRACE, WHO outbreak guidance and Rt and delay-estimation best practice. Returns which items are met, with evidence from the report, and offers an alternative wording or layout for each gap. Use when reviewing a situation report, dashboard or summary page that presents model estimates to responders.
 ---
 
 # Outbreak report check
@@ -21,8 +21,8 @@ Say so and stop if the task is one of these.
 ## Inputs
 
 1. The non-technical report: a rendered page, a URL, or its source (`.qmd`, `.Rmd`, `.md`, HTML). Required.
-2. The previous edition. Optional; without it OR-05, OR-26 and OR-27 are checked only as far as the current page allows.
-3. The technical document or code repository. Optional; without it OR-19 and OR-20 are not checked.
+2. The previous edition. Optional; without it OR-06, OR-17 and OR-18 are checked only as far as the current page allows.
+3. The technical document or code repository. Optional; without it OR-24 and OR-25 are not checked.
 
 Ask for 2 and 3 once if they are not given, then proceed with what is available.
 Where the report is source code, check what the rendered page would show, not the code comments.
@@ -32,7 +32,7 @@ Where the report is source code, check what the rendered page would show, not th
 1. Read [references/items.md](references/items.md) in full.
    Do not load [references/sources.md](references/sources.md) up front.
    Open it, at the item's id, only when an item is hard to check against this report, or when a gap needs its reason explained.
-2. Read the report. Identify the headline quantities, whether the report forecasts (OR-11), and whether it expresses probability in words (OR-25).
+2. Read the report. Identify the headline quantities, whether the report forecasts (OR-19), whether it expresses probability in words (OR-10), and whether it rests on data subject to reporting delay (OR-15).
    State these back to the user before scoring, since they decide which items apply.
 3. For each item, assign one status using the item's `Check` line:
    - `met`
@@ -53,13 +53,13 @@ It is an option for the authors, not a correction.
 - Keep it short: a sentence, a table row, a caption, or a one-line layout change. Do not rewrite sections.
 - Match the report's existing style, terms and structure.
 - Give the reason in one clause, so the authors can weigh it. Take it from the item, or from its entry in `references/sources.md` if the item alone does not make it clear.
-- Where the items name a published scale (WHO confidence at OR-13, PHIA probability at OR-25), offer it as one choice among others, not as required.
+- Where the items name a published scale (WHO confidence at OR-09, PHIA probability at OR-10), offer it as one choice among others, not as required.
 - Where the gap may be deliberate (a house style, a platform limit, an audience decision), say that it may be, and accept the authors' reason if they give one.
-- An alternative that changes presentation costs continuity (OR-26). Say so, and suggest announcing the change (OR-05).
+- An alternative that changes presentation costs continuity (OR-18). Say so, and suggest announcing the change (OR-17).
 
 ## Output
 
-A table in index order, grouped by document:
+A table in id order:
 
 | Id | Item | Status | Evidence | Alternative |
 |----|------|--------|----------|-------------|
