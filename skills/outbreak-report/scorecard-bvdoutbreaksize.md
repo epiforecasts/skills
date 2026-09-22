@@ -14,7 +14,7 @@ Part of what the page renders is not in `summary.md`. The headline bullets and
 the four tables are generated in `docs/examples/analysis.jl` and written to
 `docs/src/summary_assets/`, so some findings land there instead.
 
-4 pass, 5 partial, 15 fail.
+4 pass, 5 partial, 15 fail, 1 not applicable.
 
 | Id | Item | Verdict |
 |---|---|---|
@@ -42,6 +42,7 @@ the four tables are generated in `docs/examples/analysis.jl` and written to
 | OR-22 | Prior sensitivity stays technical | fail |
 | OR-23 | Component decomposition stays technical | pass |
 | OR-24 | Domain of applicability | fail |
+| OR-25 | Verbal probability on a defined scale | not applicable |
 
 ## Evidence
 
@@ -122,6 +123,11 @@ ranges, sits inside the headline bullets. Generated at `analysis.jl` lines
 OR-24, fail. Nothing on the page says what the estimate should not be used
 for. The README's scope paragraph describes what the work adds, not where it
 stops.
+
+OR-25, not applicable. The page makes no probability claim in words. Every
+statement is numeric or definitional, so there is nothing to band. The item
+becomes live the moment OR-07 is satisfied, because plain prose about a
+growing outbreak cannot avoid words like probably and likely.
 
 OR-23, pass on `reporting`, fail on `main`. The per-stream reproduction number
 was a summary section; 782 replaces it with a link, which satisfies the item.

@@ -81,6 +81,7 @@ detail only once they have the overview:
 | OR-22 | Prior sensitivity stays technical | Technical | |
 | OR-23 | Component decomposition stays technical | Technical | |
 | OR-24 | Domain of applicability | Non-technical | |
+| OR-25 | Verbal probability on a defined scale | Non-technical | |
 
 The real-time items exist because the report is republished. The source
 guidelines assume a document published once, and carry only OR-05 among them.
@@ -273,6 +274,13 @@ against, which is numbers standing in for judgement:
 > data or inappropriate quantitative techniques can be far less scientific and
 > defensible than a well-structured qualitative assessment. (WHO 2012, p25)
 
+This item is the confidence axis, not the likelihood axis. The two are
+separate and are routinely conflated. See OR-25.
+
+> Whereas probability reflects the likelihood that a statement is true,
+> analytical confidence reflects the soundness and stability of the
+> foundations on which the assessment of likelihood has been made. (PHIA)
+
 ### OR-14 Implications for action
 
 The report comments on what its results imply for public health action and
@@ -415,6 +423,34 @@ TRACE element 1.
 No other source in this list carries this. It is the only item that tells a
 reader where to stop.
 
+### OR-25 Verbal probability on a defined scale
+
+Where the report expresses a probability in words, the words come from a
+published scale, and the scale is stated or linked.
+
+PHIA probability yardstick, seven bands:
+
+> >0% - ~5%: Remote Chance. ~10% - ~20%: Highly Unlikely. ~25% - ~35%:
+> Unlikely. ~40% - <50%: Realistic Possibility. ~55% - ~75%: Likely or
+> Probable. ~80% - ~90%: Highly Likely. ~95% - <100%: Almost Certain. (PHIA)
+
+> The application of a standard process and terminology reduces or mitigates
+> subjectivity in the evaluation process, enabling consistency in how the
+> relative strengths and limitations of an assessment are identified,
+> explained and communicated. (PHIA)
+
+This is the likelihood axis. OR-13 is the confidence axis, and OR-06 is the
+numeric interval on a quantity. Three different things.
+
+The item binds only once a report carries plain-language prose, which is
+OR-07. A report of numbers alone never triggers it.
+
+Two caveats, both ours. The yardstick is UK intelligence practice, not health
+reporting, so the transfer is an argument rather than a precedent. And a
+published scale narrows the spread in how readers interpret probability words
+without closing it, so a band is a discipline on the writer more than a
+guarantee about the reader.
+
 ## Sources
 
 GATHER. Stevens GA, Alkema L, Black RE, et al. Guidelines for Accurate and
@@ -447,6 +483,12 @@ TRACE. Grimm V, Augusiak J, Focks A, et al. Towards better modelling and
 decision support: Documenting model development, testing, and analysis using
 TRACE. Ecological Modelling 2014;280:129-139. Eight elements of model
 documentation. Quotations are from Table 1.
+
+PHIA. Professional Head of Intelligence Assessment probability yardstick, in
+Explaining uncertainty in UK intelligence assessment. UK Government. Seven
+probability bands, and the distinction between probability and analytical
+confidence. UK intelligence practice rather than health reporting, so the
+transfer is argued at OR-25 rather than assumed.
 
 McCabe R, Kont MD, Schmit N, et al. Communicating uncertainty in epidemic
 models. Epidemics 2021;37:100520. A commentary rather than a checklist, so it
