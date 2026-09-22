@@ -252,20 +252,44 @@ GATHER item 18, EPIFORGE item 17.
 The report states in one sentence of plain language how much confidence to
 place in the headline estimate.
 
-WHO Rapid Risk Assessment template v2.1, which carries a confidence-level
-field alongside the risk assessment. Paraphrase, not a quotation: the template
-itself is not openly readable, and this is the weakest citation in the list.
+WHO rapid risk assessment manual, section "Level of confidence in the risk
+assessment".
+
+> It is important to document the risk assessment team's level of confidence
+> in the assessment and the reasons for any limitations. This will depend on
+> the reliability, completeness and quality of the information used, and the
+> underlying assumptions made with respect to the hazard, exposure and
+> context. The more evidence there is to inform the hazard, exposure and
+> context assessments, the greater confidence the team can have in the
+> results. The degree of confidence can be expressed using a descriptive scale
+> that ranges from very low to very high. (WHO 2012, p23)
+
+The manual assesses a public health risk, not a model estimate, so the
+transfer is ours: the scale carries over, the hazard, exposure and context
+structure does not. WHO also warns against the failure mode this item guards
+against, which is numbers standing in for judgement:
+
+> It should be emphasized that a quantitative risk assessment that uses poor
+> data or inappropriate quantitative techniques can be far less scientific and
+> defensible than a well-structured qualitative assessment. (WHO 2012, p25)
 
 ### OR-14 Implications for action
 
 The report comments on what its results imply for public health action and
 decision-making.
 
-EPIFORGE item 18.
+EPIFORGE item 18, WHO rapid risk assessment manual.
 
 > If the research is applicable to a specific epidemic, comment on its
 > potential implications and impact for public health action and
 > decisionmaking. (EPIFORGE 18)
+
+WHO pairs the confidence statement with the recommendation, in the same step:
+
+> Undertake a full risk assessment and state the level of confidence in the
+> assessment. Provide recommendations for decision-makers, including which
+> actions should be taken and which should have the highest priority.
+> (WHO 2012, p7)
 
 ### OR-15 Estimates available as data
 
@@ -411,8 +435,13 @@ for outbreak data. Public Health 2026. 9 items, Delphi. Bounds this list
 rather than overlapping it: it covers surveillance counts an authority
 publishes and contains no item on model-derived estimates.
 
-WHO Rapid Risk Assessment template v2.1 and its accompanying guidance.
-Paraphrased, see OR-13.
+WHO. Rapid Risk Assessment of Acute Public Health Events. Geneva: World Health
+Organization, 2012. WHO/HSE/GAR/ARO/2012.1, 44 pages. Quotations are from the
+sections "Level of confidence in the risk assessment" and "Quantification in
+risk assessment", and from the response-actions table. Assesses a public
+health risk rather than a model estimate, so it is cited for the confidence
+scale and its pairing with recommended actions, not for its assessment
+structure.
 
 TRACE. Grimm V, Augusiak J, Focks A, et al. Towards better modelling and
 decision support: Documenting model development, testing, and analysis using
