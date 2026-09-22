@@ -44,6 +44,15 @@ The split is ISPOR-7's:
 > should be made available openly or under agreements that protect
 > intellectual property.
 
+TRACE gives the reason the split works, which is that readers descend into
+detail only once they have the overview:
+
+> Readers will first want to see an overview and only then decide whether and
+> where to go into more detail. Thus, to allow for hierarchical reading and to
+> keep TRACE documents concise and readable, it is critical to start the
+> entire document and each of its sections with an executive summary. [...]
+> In general, summaries should always come first and details later.
+
 ## Index
 
 | Id | Item | Document | Real-time |
@@ -71,6 +80,7 @@ The split is ISPOR-7's:
 | OR-21 | Inference diagnostics stay technical | Technical | |
 | OR-22 | Prior sensitivity stays technical | Technical | |
 | OR-23 | Component decomposition stays technical | Technical | |
+| OR-24 | Domain of applicability | Non-technical | |
 
 The real-time items exist because the report is republished. The source
 guidelines assume a document published once, and carry only OR-05 among them.
@@ -82,12 +92,17 @@ guidelines assume a document published once, and carry only OR-05 among them.
 The report states what the estimate is for and which decisions it is intended
 to support.
 
-GATHER item 1, EPIFORGE item 2, ISPOR-7.
+GATHER item 1, EPIFORGE item 2, TRACE element 1, ISPOR-7.
 
 > Define the indicator(s), populations (including age, sex, and geographic
 > entities), and time period(s) for which estimates were made. (GATHER 1)
 
 > Define the purpose of study and forecasting targets. (EPIFORGE 2)
+
+> The decision-making context in which the model will be used; the types of
+> model clients or stakeholders addressed; a precise specification of the
+> question(s) that should be answered with the model, including a
+> specification of necessary model outputs. (TRACE 1, problem formulation)
 
 ### OR-02 Quantities defined before use
 
@@ -136,8 +151,20 @@ GATHER item 16, EPIFORGE item 14.
 
 > Present and explain uncertainty of forecasting results. (EPIFORGE 14)
 
-Neither source specifies a number of levels. The restriction to one is ours,
-and follows from the audience.
+Neither source specifies a number of levels. The restriction to one for a
+headline quantity is ours, and follows from the audience. McCabe et al. put
+the audience first but themselves use two levels for a trajectory and one for
+the decision-relevant summary:
+
+> The most important considerations when deciding on a data visualisation is
+> knowing who the audiences are and ensuring that key messages can be easily
+> and quickly absorbed. (McCabe et al. 2021)
+
+> Trajectories are summarised using the median with 50% and 95% credible
+> intervals [...] Additionally, we have provided two metrics of importance to
+> decision-makers: the timing and the magnitude of peak ICU bed demand per
+> simulation, presented as point estimates and 95% credible intervals.
+> (McCabe et al. 2021)
 
 ### OR-07 Non-technical summary of results
 
@@ -170,6 +197,13 @@ GATHER item 6.
 > Identify and describe any categories of input data that have potentially
 > important biases (e.g., based on characteristics listed in item 5).
 > (GATHER 6)
+
+TRACE element 3 asks for the same judgement, and says who it is for:
+
+> The quality and sources of numerical and qualitative data used to
+> parameterize the model [...] This critical evaluation will allow model users
+> to assess the scope and the uncertainty of the data and knowledge on which
+> the model is based. (TRACE 3, data evaluation)
 
 ### OR-10 Sources of uncertainty included and excluded
 
@@ -287,6 +321,10 @@ GATHER item 10, EPIFORGE item 3, ISPOR-7, TRACE.
 
 > Fully document the methods. (EPIFORGE 3)
 
+> The model, i.e. a detailed written model description. [...] Model users
+> should learn what the model is, how it works, and what guided its design.
+> (TRACE 2, model description)
+
 ### OR-20 Model evaluation and comparison
 
 The technical document reports how the model was evaluated and how it compares
@@ -302,6 +340,17 @@ GATHER items 11 and 12, EPIFORGE item 10, TRACE.
 
 > Describe the model validation, and justify the approach. (EPIFORGE 10)
 
+TRACE separates fit from independent corroboration, and only the second is
+evidence the model predicts:
+
+> (1) How well model output matches observations and (2) how much calibration
+> and effects of environmental drivers were involved in obtaining good fits of
+> model output and data. (TRACE 6, model output verification)
+
+> How model predictions compare to independent data and patterns that were not
+> used, and preferably not even known, while the model was developed,
+> parameterized, and verified. (TRACE 8, model output corroboration)
+
 ### OR-21 Inference diagnostics stay technical
 
 Sampler diagnostics do not appear in the non-technical document.
@@ -316,6 +365,11 @@ Prior-data conflict diagnostics do not appear in the non-technical document.
 
 ISPOR-7, by exclusion, as above. GATHER 12 places sensitivity analysis results
 in the methods and results of the study, not in the non-technical summary.
+TRACE puts sensitivity in its own technical element:
+
+> (1) How sensitive model output is to changes in model parameters
+> (sensitivity analysis), and (2) how well the emergence of model output has
+> been understood. (TRACE 7, model analysis)
 
 ### OR-23 Component decomposition stays technical
 
@@ -323,6 +377,19 @@ Per-stream or per-component decompositions do not appear in the non-technical
 document, beyond a link.
 
 ISPOR-7, by exclusion. Ours in its specific form.
+
+### OR-24 Domain of applicability
+
+The report states what the estimate should not be used for, and the limits of
+acceptable extrapolation.
+
+TRACE element 1.
+
+> [...] and a statement of the domain of applicability of the model, including
+> the extent of acceptable extrapolations. (TRACE 1, problem formulation)
+
+No other source in this list carries this. It is the only item that tells a
+reader where to stop.
 
 ## Sources
 
@@ -350,8 +417,12 @@ Paraphrased, see OR-13.
 TRACE. Grimm V, Augusiak J, Focks A, et al. Towards better modelling and
 decision support: Documenting model development, testing, and analysis using
 TRACE. Ecological Modelling 2014;280:129-139. Eight elements of model
-documentation. Cited for structure only; element names taken from secondary
-description, not quoted.
+documentation. Quotations are from Table 1.
+
+McCabe R, Kont MD, Schmit N, et al. Communicating uncertainty in epidemic
+models. Epidemics 2021;37:100520. A commentary rather than a checklist, so it
+is cited for its reasoning about audience and presentation, not as the source
+of an item.
 
 ## What this list does not cover
 

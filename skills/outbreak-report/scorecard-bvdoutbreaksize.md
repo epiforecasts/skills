@@ -14,7 +14,7 @@ Part of what the page renders is not in `summary.md`. The headline bullets and
 the four tables are generated in `docs/examples/analysis.jl` and written to
 `docs/src/summary_assets/`, so some findings land there instead.
 
-4 pass, 5 partial, 14 fail.
+4 pass, 5 partial, 15 fail.
 
 | Id | Item | Verdict |
 |---|---|---|
@@ -41,6 +41,7 @@ the four tables are generated in `docs/examples/analysis.jl` and written to
 | OR-21 | Inference diagnostics stay technical | fail |
 | OR-22 | Prior sensitivity stays technical | fail |
 | OR-23 | Component decomposition stays technical | pass |
+| OR-24 | Domain of applicability | fail |
 
 ## Evidence
 
@@ -117,6 +118,10 @@ folds them into a dropdown, which hides them rather than moving them.
 OR-22, fail. The shift-from-priors bullet, reported in prior interquartile
 ranges, sits inside the headline bullets. Generated at `analysis.jl` lines
 2359 to 2365.
+
+OR-24, fail. Nothing on the page says what the estimate should not be used
+for. The README's scope paragraph describes what the work adds, not where it
+stops.
 
 OR-23, pass on `reporting`, fail on `main`. The per-stream reproduction number
 was a summary section; 782 replaces it with a link, which satisfies the item.
