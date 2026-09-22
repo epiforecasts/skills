@@ -169,7 +169,7 @@ That is why the item asks for the meaning of the interval in words, not only its
 > (Gostic et al., "Accounting for incomplete observation")
 
 > Communication by authorities to the public should include explicit information about uncertainties associated with risks, events and interventions, and indicate what is known and not known at a given time.
-> (WHO 2017, recommendation on communicating uncertainty)
+> (WHO 2017, recommendation A.2, communicating uncertainty; strong recommendation, moderate quality evidence)
 
 ### OR-09 Confidence statement
 
@@ -451,7 +451,7 @@ Quotations are from the sections "Level of confidence in the risk assessment" an
 
 WHO 2017. Communicating risk in public health emergencies: a WHO guideline for emergency risk communication (ERC) policy and practice.
 Geneva: World Health Organization, 2017.
-Quotation is the recommendation as given in the NCBI Bookshelf edition, not yet checked against the full guideline.
+Quotation is recommendation A.2.
 
 WHO 2025. Communicating uncertainty in health emergencies: guidance and tips.
 Copenhagen: WHO Regional Office for Europe, 2025.
