@@ -40,7 +40,16 @@ GATHER names two audiences and separates what each needs:
 > They also need an explanation of how new estimates compare to previously published estimates, including why they differ.
 > Researchers require a higher degree of detail about methods, so that they can fully understand and potentially reproduce studies and advance methods.
 
-ISPOR-7 requires the non-technical description to be unrestricted, which sets the lower bound on assumed expertise.
+ISPOR-7 separates the two documents by access and by expertise.
+On access, the non-technical description is public and the technical one need not be:
+
+> information put into the public domain without restriction ("public documentation") should be distinguished from information made available under agreements that protect intellectual property ("confidential documentation").
+> For public documentation, the nontechnical description should be available to all who ask.
+
+On expertise, the non-technical document carries no requirement, which sets the lower bound on what a report may assume of its reader:
+
+> Nontechnical documentation should be accessible to any interested reader.
+> [...] the intention is to provide sufficient information to enable the full spectrum of readers to understand a model's accuracy, limitations, and potential applications at a level appropriate to their expertise and needs.
 
 Hadley et al. interviewed policy and decision makers and science advisors in 13 countries about modelled COVID-19 evidence.
 The reader-side items below are drawn from that population, so the audience is defined to match the population the evidence was collected from.
@@ -519,7 +528,7 @@ ISPOR-7.
 Eddy DM, Hollingworth W, Caro JJ, et al.
 Model Transparency and Validation: A Report of the ISPOR-SMDM Modeling Good Research Practices Task Force-7.
 Value in Health 2012;15(6):843-850.
-Quotation is from the abstract.
+Quotations are from the abstract and from the Transparency section, under "Nontechnical Documentation" and "Public Versus Confidential Documentation".
 
 TRACE. Grimm V, Augusiak J, Focks A, et al.
 Towards better modelling and decision support: Documenting model development, testing, and analysis using TRACE.
