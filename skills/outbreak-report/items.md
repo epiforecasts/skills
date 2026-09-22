@@ -26,6 +26,19 @@ This matches GATHER's own split:
 > Researchers require a higher degree of detail about methods, so that they
 > can fully understand and potentially reproduce studies and advance methods.
 
+Tailoring to the audience is itself one of three strategies a rapid scoping
+review of 16 evidence-communication frameworks identified, alongside
+information packaging:
+
+> Three primary evidence communication strategies, comprising eleven
+> substrategies, emerged: "Health information packaging", "Targeting and
+> tailoring messages to the audience", and "Combined communication
+> strategies". (Barreto et al. 2024)
+
+That review covers the process of communicating evidence rather than what a
+report must contain, and mentions uncertainty nowhere, so it sources no item
+here.
+
 ## Two documents
 
 Non-technical: one page for the primary reader, available to anyone.
@@ -82,6 +95,7 @@ detail only once they have the overview:
 | OR-23 | Component decomposition stays technical | Technical | |
 | OR-24 | Domain of applicability | Non-technical | |
 | OR-25 | Verbal probability on a defined scale | Non-technical | |
+| OR-26 | Consistent presentation between updates | Non-technical | yes |
 
 The real-time items exist because the report is republished. The source
 guidelines assume a document published once, and carry only OR-05 among them.
@@ -167,6 +181,34 @@ the decision-relevant summary:
 > simulation, presented as point estimates and 95% credible intervals.
 > (McCabe et al. 2021)
 
+Padilla et al. tested this empirically on 1299 participants, and the finding
+cuts both ways:
+
+> participants were most trusting of visualizations that showed less visual
+> information, including a 95% confidence interval, single forecast, and
+> grayscale encoded forecasts. Participants maintained high trust in intervals
+> labeled with 50% and 25% and did not proportionally scale their trust to the
+> indicated interval size. (Padilla et al. 2023)
+
+> Despite the high trust, the 95% CI condition was the most likely to evoke
+> predictions that did not correspond with the actual COVID-19 trend.
+> (Padilla et al. 2023)
+
+Readers did not adjust their trust for interval width, which is the argument
+for showing one interval and naming it. Trust is not accuracy, though, and the
+simplest display produced the worst trend predictions, so this item buys
+legibility rather than comprehension.
+
+Policy and decision makers in 13 countries asked for the same simplicity, and
+named the opposite failure:
+
+> the vast majority of interviewees without prompt first stressed the need for
+> simple graphics. (Hadley et al. 2025)
+
+> diagrams with extremely wide confidence intervals were not helpful, dubbed
+> "crayon diagrams" - diagrams with huge uncertainty that could have been
+> drawn with a crayon. (Hadley et al. 2025)
+
 ### OR-07 Non-technical summary of results
 
 The report summarises the results in non-technical terms, including a
@@ -176,6 +218,16 @@ EPIFORGE item 15.
 
 > Briefly summarize the results in nontechnical terms, including a
 > nontechnical interpretation of forecast uncertainty. (EPIFORGE 15)
+
+Hadley et al. give the test the summary has to pass, which is that somebody
+who is not a modeller has to be able to say it again:
+
+> Several respondents also identified a focus on whether what modellers
+> explained could be easily explained and translated again by non-modellers.
+> (Hadley et al. 2025)
+
+> oversharing of information (i.e. scientific detail) is perceived as useless
+> to policymakers. (Hadley et al. 2025)
 
 ### OR-08 Data sources named
 
@@ -205,6 +257,12 @@ TRACE element 3 asks for the same judgement, and says who it is for:
 > parameterize the model [...] This critical evaluation will allow model users
 > to assess the scope and the uncertainty of the data and knowledge on which
 > the model is based. (TRACE 3, data evaluation)
+
+Some readers act on this by dropping the quantity:
+
+> in a few countries presenting numbers of cases for example was quickly
+> deemed ineffective, since this metric is not accurate and is heavily
+> dependent [on testing]. (Hadley et al. 2025)
 
 ### OR-10 Sources of uncertainty included and excluded
 
@@ -298,6 +356,13 @@ WHO pairs the confidence statement with the recommendation, in the same step:
 > assessment. Provide recommendations for decision-makers, including which
 > actions should be taken and which should have the highest priority.
 > (WHO 2012, p7)
+
+Hadley et al. found the implication is carried by the choice of quantity, not
+only by a closing paragraph:
+
+> Streamlining advice by presenting modelling findings in terms of these more
+> operational concepts (doubling time, time to X, hospitalisations, deaths)
+> was preferred in a few different settings. (Hadley et al. 2025)
 
 ### OR-15 Estimates available as data
 
@@ -451,6 +516,28 @@ published scale narrows the spread in how readers interpret probability words
 without closing it, so a band is a discipline on the writer more than a
 guarantee about the reader.
 
+### OR-26 Consistent presentation between updates
+
+Successive updates keep the same quantities, in the same order, in the same
+format, and say so when that changes.
+
+Hadley et al. 2025.
+
+> Lastly, interviewees agreed that consistency in colours, styles, graphs etc.
+> is important. "Be consistent with the way you packaged the first
+> information". Presenting in the same format each week enabled policymakers
+> and advisors to gain familiarity and to provide a pattern of feedback.
+> (Hadley et al. 2025)
+
+This is the only item sourced to evidence gathered from readers of real
+outbreak reports rather than from a guideline committee. It exists because the
+report is republished: a document published once cannot be inconsistent with
+itself.
+
+It pulls against every other item here, since each change to satisfy one of
+them breaks continuity with the last edition. The resolution is OR-05, which
+requires the report to say what changed.
+
 ## Sources
 
 GATHER. Stevens GA, Alkema L, Black RE, et al. Guidelines for Accurate and
@@ -489,6 +576,24 @@ Explaining uncertainty in UK intelligence assessment. UK Government. Seven
 probability bands, and the distinction between probability and analytical
 confidence. UK intelligence practice rather than health reporting, so the
 transfer is argued at OR-25 rather than assumed.
+
+Hadley L, Kremer P, Pulford J, et al. Visual preferences for communicating
+modelling: a global analysis of COVID-19 policy and decision makers. medRxiv
+2025, 10.1101/2024.11.05.24316774. Interviews with policy and decision makers
+and science advisors in 13 countries. Preprint. Sources OR-26 and supports
+OR-06, OR-07, OR-09 and OR-14.
+
+Padilla L, Hosseinpour H, Fygenson R, et al. Multiple Forecast Visualizations:
+trade-offs in trust and performance in multiple COVID-19 forecast
+visualizations. IEEE Transactions on Visualization and Computer Graphics 2023.
+Three studies, 1299 participants. Cited at OR-06 for both its finding and its
+counter-finding.
+
+Barreto JOM, et al. Research evidence communication for policy-makers: a rapid
+scoping review on frameworks, guidance and tools. 2024. 16 frameworks for the
+process of communicating evidence. Cited in the audience section only. It
+sources no item, because it covers how communication is organised rather than
+what a report contains, and does not mention uncertainty.
 
 McCabe R, Kont MD, Schmit N, et al. Communicating uncertainty in epidemic
 models. Epidemics 2021;37:100520. A commentary rather than a checklist, so it
