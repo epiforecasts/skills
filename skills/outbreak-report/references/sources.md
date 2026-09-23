@@ -7,14 +7,14 @@ Where a source is cited without quotation, the entry says so.
 ## Scope
 
 The items adapt GATHER, EPIFORGE 2020 and TRACE, which assume a document published once, to a report that is republished.
-OR-15, OR-16, OR-17 in its real-time form, OR-18 and part of OR-14 arise only on republication.
+OR-14, OR-15, OR-16 in its real-time form, OR-17 and part of OR-13 arise only on republication.
 Gostic et al., Charniga et al. and Abbott et al. supply the practice specific to real-time transmission and delay estimation.
 WHO guidance on risk assessment and on communicating uncertainty supplies the practice specific to outbreak response.
 CDC's Center for Forecasting and Outbreak Analytics and the UK's SPI-M-O show confidence and probability scales in use for real-time outbreak assessment.
 Where a general modelling source and an infectious-disease source say the same thing, the infectious-disease source is cited.
 
 ORBIT sets a minimum standard for the surveillance counts an authority publishes, and carries no item on a modelled estimate.
-It is cited here for the counts a model takes as input (OR-05), for reporting cadence (OR-16), for the date a count refers to (OR-04), and for consistency between reports (OR-18).
+It is cited here for the counts a model takes as input (OR-04), for reporting cadence (OR-15), for the date a count refers to (OR-03), and for consistency between reports (OR-17).
 
 ## Reader
 
@@ -34,33 +34,26 @@ Whitty, from the side of the policy reader:
 Hadley et al. interviewed policy and decision makers and science advisors in 13 countries about modelled COVID-19 evidence.
 The reader evidence cited below comes from that population.
 
+## Uncertainty and confidence
+
+The items keep two statements apart: how uncertain the estimate is (OR-06 to OR-08), and how much confidence the evidence behind it deserves (OR-09).
+The distinction is from van der Bles et al., a cross-disciplinary review of how to communicate epistemic uncertainty:
+
+> we have observed that the major division in practical examples of communication comes between statements about uncertainty around the object of interest, which may or may not comprise precise first-order probabilities, and a 'meta-level' reflection on the adequacy of evidence upon which to make any judgement whatever.
+> We therefore consider that, when communicating, it is most appropriate to distinguish two fundamental levels of uncertainty
+> (van der Bles et al. 2019, section 3)
+
+> Direct uncertainty may be assessed through modelling or through expert judgement, involving aspects of both first- and second-order uncertainty, and may be quantified to a greater or lesser extent, whereas indirect uncertainty is a reflexive summary of our confidence in the models or the experts.
+> (van der Bles et al. 2019, section 3)
+
+They read the IPCC's two metrics the same way: likelihood for direct uncertainty, confidence for indirect.
+
+> Secondly, indirect (underlying) uncertainties are expressed through a qualitative expression of confidence in the validity of a finding based on the type, amount, quality and consistency of evidence (which can include theory, models and expert judgement)
+> (van der Bles et al. 2019, on IPCC)
+
 ## Items
 
-### OR-01 Two documents
-
-Splitting the report into two documents is added.
-It follows from GATHER's two audiences, quoted under Reader, who need different levels of detail, and from Boden and McKendrick's definition of transparency, which asks both for reproducible methods and for results that are understood:
-
-> Transparency refers to the clear documentation of the scientific approach so that methods are robust, repeatable, and reproducible, and outcomes are clearly communicated and understood.
-> (Boden and McKendrick 2017)
-
-TRACE states the reading order the split assumes:
-
-> Readers will first want to see an overview and only then decide whether and where to go into more detail.
-> \[...\] In general, summaries should always come first and details later.
-
-Keeping diagnostics technical rests mainly on the reader, who does not develop models and cannot act on a diagnostic.
-Whitty describes the cost of leaving them in:
-
-> Authors, referees and editors can transform papers making a simple point using methods easily understood by policymakers into Baroque complexity understood only by modelers or statisticians by insisting on using techniques irrelevant to the key policy message which only add a spurious level of precision.
-> (Whitty 2015)
-
-TRACE places sensitivity analysis in model analysis, a technical element:
-
-> (1) How sensitive model output is to changes in model parameters (sensitivity analysis), and (2) how well the emergence of model output has been understood.
-> (TRACE 7, model analysis)
-
-### OR-02 Purpose and intended use
+### OR-01 Purpose and intended use
 
 All three guidelines place it first.
 
@@ -73,9 +66,9 @@ All three guidelines place it first.
 > The decision-making context in which the model will be used; the types of model clients or stakeholders addressed; a precise specification of the question(s) that should be answered with the model, including a specification of necessary model outputs.
 > (TRACE 1, problem formulation)
 
-### OR-03 Domain of applicability
+### OR-02 Domain of applicability
 
-The complement of OR-02.
+The complement of OR-01.
 
 > \[...\] and a statement of the domain of applicability of the model, including the extent of acceptable extrapolations.
 > (TRACE 1, problem formulation)
@@ -84,9 +77,9 @@ The complement of OR-02.
 > These limitations help shape stakeholder expectations and prevent misuse of results.
 > (Abbott et al., section 3.1)
 
-### OR-04 Quantities defined before use
+### OR-03 Quantities defined before use
 
-GATHER 1, quoted at OR-02, requires the definition.
+GATHER 1, quoted at OR-01, requires the definition.
 The ordering requirement is added, and applies where a report presents tables and figures before the narrative that defines them.
 
 ORBIT requires the case definition to be published with the counts, and accepts report date where diagnosis date is not feasible:
@@ -100,7 +93,7 @@ Gostic et al. on aligning a smoothed estimate to its date:
 > If a wide smoothing window is needed, report R t for t corresponding to the middle of the window.
 > (Gostic et al., section summary)
 
-### OR-05 Data sources and their biases
+### OR-04 Data sources and their biases
 
 Merges two earlier items: data sources named, and known biases in the inputs.
 Showing the observed data is supported by ORBIT, whose nine items are the counts most models take as input, and by Charniga et al.
@@ -126,7 +119,7 @@ Showing the observed data is supported by ORBIT, whose nine items are the counts
 > The epidemic curve can indicate at which stage of the epidemic the analysis took place and whether the outbreak is now over (i.e., whether certain biases need to be adjusted for).
 > (Charniga et al.)
 
-### OR-06 Bounded set of headline estimates
+### OR-05 Bounded set of headline estimates
 
 A report presenting many quantities at once gives no ordering, and a repeat reader cannot tell which to follow.
 GATHER 1 requires each indicator to be defined but does not bound the set; bounding it is added.
@@ -140,7 +133,12 @@ GATHER 1 requires each indicator to be defined but does not bound the set; bound
 > Streamlining advice by presenting modelling findings in terms of these more operational concepts (doubling time, time to X, hospitalisations, deaths) was preferred in a few different settings.
 > (Hadley et al. 2025)
 
-### OR-07 Headline estimate with an interval
+Whitty on detail that adds only spurious precision:
+
+> Authors, referees and editors can transform papers making a simple point using methods easily understood by policymakers into Baroque complexity understood only by modelers or statisticians by insisting on using techniques irrelevant to the key policy message which only add a spurious level of precision.
+> (Whitty 2015)
+
+### OR-06 Headline estimate with an interval
 
 The guidelines require an interval and do not say which level or how many.
 An earlier draft restricted the headline to one level; no source supports that, and it was dropped.
@@ -167,7 +165,7 @@ Charniga et al. note the levels usually used, and ask for the level to be report
 > diagrams with extremely wide confidence intervals were not helpful, dubbed "crayon diagrams" - diagrams with huge uncertainty that could have been drawn with a crayon.
 > (Hadley et al. 2025)
 
-### OR-08 Kinds of uncertainty included and excluded
+### OR-07 Kinds of uncertainty included and excluded
 
 The kinds named in the item come from the infectious-disease modelling literature: data and reporting (Gostic et al., Becker et al.), parameters and model structure (Howerton et al.), and chance (McCabe et al.).
 Thorén and Gerlee explain why structure has to be stated separately: an interval is conditional on the chosen model.
@@ -210,7 +208,51 @@ IPCC asks for the role of structural uncertainty to be stated whenever a range i
 > The combination of two sources of uncertainty lead to much greater variation in trajectories than that which is observed under the models with a single source of uncertainty.
 > (McCabe et al. 2021)
 
+### OR-08 Verbal probability on a defined scale
+
+The yardstick comes from UK intelligence practice.
+SPI-M-O adopted it for its COVID-19 consensus statements, and stated so in each statement:
+
+> All probability statements are in line with the framework given in Annex 2.
+> \[...\] Annex 2: PHIA framework of language for discussing probabilities
+> (SPI-M-O, 6 January 2022)
+
+It is one published scale among several; the IPCC likelihood scale, below, is another.
+
+> 0% - \~5%: Remote Chance.
+> \~10% - \~20%: Highly Unlikely.
+> \~25% - \~35%: Unlikely.
+> \~40% - \<50%: Realistic Possibility.
+> \~55% - \~75%: Likely or Probable.
+> \~80% - \~90%: Highly Likely.
+> \~95% - \<100%: Almost Certain.
+> (PHIA)
+
+> The application of a standard process and terminology reduces or mitigates subjectivity in the evaluation process, enabling consistency in how the relative strengths and limitations of an assessment are identified, explained and communicated.
+> (PHIA)
+
+> Virtually certain 99-100% probability.
+> Very likely 90-100% probability.
+> Likely 66-100% probability.
+> About as likely as not 33 to 66% probability.
+> Unlikely 0-33% probability.
+> Very unlikely 0-10% probability.
+> Exceptionally unlikely 0-1% probability.
+> (IPCC 2010, Table 1)
+
+van der Bles et al. place probability words with intervals and probabilities, as direct uncertainty:
+
+> Direct uncertainty about the fact, number or scientific hypothesis.
+> This can be communicated either in absolute quantitative terms, say a probability distribution or confidence interval, or expressed relative to alternatives, such as likelihood ratios, or given an approximate quantitative form, verbal summary and so on.
+> (van der Bles et al. 2019, section 3)
+
 ### OR-09 Confidence statement
+
+The split between this item and OR-06 to OR-08 follows van der Bles et al., set out under Uncertainty and confidence above.
+
+> Indirect uncertainty in terms of the quality of the underlying knowledge that forms a basis for any claims about the fact, number or hypothesis.
+> This will generally be communicated as a list of caveats about the underlying sources of evidence, possibly amalgamated into a qualitative or ordered categorical scale.
+> (van der Bles et al. 2019, section 3)
 
 WHO assesses a public health risk rather than a model estimate, so its descriptive scale transfers and its hazard, exposure and context structure does not.
 Two outbreak bodies apply confidence levels in real time.
@@ -252,41 +294,13 @@ GRADE rates a body of evidence rather than a model output, so it fits best where
 
 Guyatt et al. 2008 set out how GRADE rates quality of evidence; cited without quotation.
 
-### OR-10 Verbal probability on a defined scale
+### OR-10 Non-technical summary of results
 
-The yardstick comes from UK intelligence practice.
-SPI-M-O adopted it for its COVID-19 consensus statements, and stated so in each statement:
+TRACE on reading order:
 
-> All probability statements are in line with the framework given in Annex 2.
-> \[...\] Annex 2: PHIA framework of language for discussing probabilities
-> (SPI-M-O, 6 January 2022)
-
-It is one published scale among several; the IPCC likelihood scale, below, is another.
-
-> 0% - \~5%: Remote Chance.
-> \~10% - \~20%: Highly Unlikely.
-> \~25% - \~35%: Unlikely.
-> \~40% - \<50%: Realistic Possibility.
-> \~55% - \~75%: Likely or Probable.
-> \~80% - \~90%: Highly Likely.
-> \~95% - \<100%: Almost Certain.
-> (PHIA)
-
-> The application of a standard process and terminology reduces or mitigates subjectivity in the evaluation process, enabling consistency in how the relative strengths and limitations of an assessment are identified, explained and communicated.
-> (PHIA)
-
-> Virtually certain 99-100% probability.
-> Very likely 90-100% probability.
-> Likely 66-100% probability.
-> About as likely as not 33 to 66% probability.
-> Unlikely 0-33% probability.
-> Very unlikely 0-10% probability.
-> Exceptionally unlikely 0-1% probability.
-> (IPCC 2010, Table 1)
-
-### OR-11 Non-technical summary of results
-
-TRACE's summary-first ordering is quoted at OR-01.
+> Readers will first want to see an overview and only then decide whether and where to go into more detail.
+> \[...\] In general, summaries should always come first and details later.
+> (TRACE)
 
 > Briefly summarize the results in nontechnical terms, including a nontechnical interpretation of forecast uncertainty.
 > (EPIFORGE 15)
@@ -294,7 +308,7 @@ TRACE's summary-first ordering is quoted at OR-01.
 > Several respondents also identified a focus on whether what modellers explained could be easily explained and translated again by non-modellers.
 > (Hadley et al. 2025)
 
-### OR-12 Limitations
+### OR-11 Limitations
 
 
 > Discuss limitations of the estimates.
@@ -304,7 +318,7 @@ TRACE's summary-first ordering is quoted at OR-01.
 > Describe the weaknesses of the forecast, including weaknesses specific to data quality and methods.
 > (EPIFORGE 17)
 
-### OR-13 Implications for action
+### OR-12 Implications for action
 
 WHO pairs the confidence statement (OR-09) with the recommendation in a single step.
 
@@ -315,7 +329,7 @@ WHO pairs the confidence statement (OR-09) with the recommendation in a single s
 > Provide recommendations for decision-makers, including which actions should be taken and which should have the highest priority.
 > (WHO 2012, p7)
 
-### OR-14 Data cut-off
+### OR-13 Data cut-off
 
 WHO asks for statements to be labelled as based on what is known at the time.
 A data cut-off date is the form that label takes for a model estimate; that form is added.
@@ -327,7 +341,7 @@ EPIFORGE 4 asks whether a forecast was made in real time, which implies but does
 > Identify whether the forecast was performed prospectively, in real time, and/or retrospectively.
 > (EPIFORGE 4)
 
-### OR-15 Provisional recent estimates
+### OR-14 Provisional recent estimates
 
 Gostic et al. and Charniga et al. address the analyst: adjust for right truncation or drop the incomplete dates.
 WHO addresses the reader: say that information will change.
@@ -354,7 +368,7 @@ ORBIT notes the same bias in a testing-lag indicator it recommends beyond its co
 > This item represents an indicator for testing lag and has the potential to be subject to right truncation bias in an exponentially growing epidemic.
 > (ORBIT, additional recommendation 1)
 
-### OR-16 Update cadence
+### OR-15 Update cadence
 
 ORBIT sets a minimum cadence for the authority's counts.
 It does not require the report to state its cadence; that is added.
@@ -363,7 +377,7 @@ It does not require the report to state its cadence; that is added.
 > This item specifies that public health authorities should, at a minimum, report to the public weekly.
 > (ORBIT 7)
 
-### OR-17 Change since the last update
+### OR-16 Change since the last update
 
 GATHER requires the reason, not only the series of past estimates.
 
@@ -379,7 +393,7 @@ GATHER requires the reason, not only the series of past estimates.
 > To avoid being accused of inconsistency as and when guidance is updated, you need to proclaim and explain uncertainty – prominently and repeatedly – and make clear that science-based advice may change as science evolves.
 > (WHO 2025)
 
-### OR-18 Consistent presentation between updates
+### OR-17 Consistent presentation between updates
 
 No guideline on modelled estimates carries this item, because a document published once cannot be inconsistent with itself.
 ORBIT asks for it between jurisdictions and over time.
@@ -393,10 +407,10 @@ ORBIT asks for it between jurisdictions and over time.
 > Therefore, we encourage coordination among public health authorities to maintain uniformity and comparability of reporting.
 > (ORBIT, discussion)
 
-### OR-19 Fit to the data
+### OR-18 Fit to the data
 
-Fit to the data used in fitting (OR-19) and performance against data not yet seen (OR-20) are different evidence.
-TRACE separates them (TRACE 6 here, TRACE 8 at OR-20).
+Fit to the data used in fitting (OR-18) and performance against data not yet seen (OR-19) are different evidence.
+TRACE separates them (TRACE 6 here, TRACE 8 at OR-19).
 
 > (1) How well model output matches observations and (2) how much calibration and effects of environmental drivers were involved in obtaining good fits of model output and data.
 > (TRACE 6, model output verification)
@@ -405,11 +419,11 @@ TRACE separates them (TRACE 6 here, TRACE 8 at OR-20).
 > These checks form the foundation of model validation by comparing model-generated predictions against observed patterns.
 > (Abbott et al., section 3.9.4)
 
-GATHER 12 is quoted at OR-26.
+GATHER 12 is quoted at OR-25.
 
-### OR-20 Predictive performance
+### OR-19 Predictive performance
 
-EPIFORGE places the evaluation in the methods of a study; surfacing the result in the non-technical document is added.
+EPIFORGE places the evaluation in the methods of a study; surfacing the result alongside the headline is added.
 TRACE separates agreement with the data used in fitting from comparison against data not used, and only the second is evidence of prediction.
 
 > Describe the forecast accuracy evaluation method used, with justification.
@@ -421,7 +435,7 @@ TRACE separates agreement with the data used in fitting from comparison against 
 > How model predictions compare to independent data and patterns that were not used, and preferably not even known, while the model was developed, parameterized, and verified.
 > (TRACE 8, model output corroboration)
 
-### OR-21 Estimates available as data
+### OR-20 Estimates available as data
 
 > Provide published estimates in a file format from which data can be efficiently extracted.
 > (GATHER 15)
@@ -429,7 +443,7 @@ TRACE separates agreement with the data used in fitting from comparison against 
 > If results are published as a data object, encourage a time-stamped version number.
 > (EPIFORGE 16)
 
-### OR-22 Code available
+### OR-21 Code available
 
 > State how analytic or statistical source code used to generate estimates can be accessed.
 > (GATHER 14)
@@ -446,9 +460,9 @@ TRACE separates agreement with the data used in fitting from comparison against 
 > Make model code publicly accessible and easily reproducible; publish results publicly (eg, through preprint servers)
 > (Becker et al. 2021, Table)
 
-Zavalis and Ioannidis, quoted at OR-23, found code sharing among the indispensable transparency indicators for infectious disease models.
+Zavalis and Ioannidis, quoted at OR-22, found code sharing among the indispensable transparency indicators for infectious disease models.
 
-### OR-23 Authorship and funding
+### OR-22 Authorship and funding
 
 > Data and code sharing are indispensable for reproducing them, protocol registration may be useful sometimes, and declarations of conflicts of interest (COIs) and of funding are quintessential for transparency.
 > (Zavalis and Ioannidis 2022, on infectious disease models)
@@ -459,12 +473,12 @@ Zavalis and Ioannidis, quoted at OR-23, found code sharing among the indispensab
 > List the funding sources for the work.
 > (GATHER 2)
 
-### OR-24 Contact and feedback route
+### OR-23 Contact and feedback route
 
 No published source found. Added.
-GATHER 5 (quoted at OR-05) requires a contact for data that cannot be shared, a narrower case.
+GATHER 5 (quoted at OR-04) requires a contact for data that cannot be shared, a narrower case.
 
-### OR-25 Methods sufficient to reproduce
+### OR-24 Methods sufficient to reproduce
 
 
 > Provide a detailed description of all steps of the analysis, including mathematical formulae.
@@ -488,9 +502,15 @@ GATHER 5 (quoted at OR-05) requires a contact for data that cannot be shared, a 
 > Reporting decisions made at each stage of the workflow is essential, including rationales for data source selection, integration method choices, model structure assumptions, and validation procedures undertaken.
 > (Abbott et al., section 4.2)
 
-### OR-26 Model evaluation and comparison
+> Transparency refers to the clear documentation of the scientific approach so that methods are robust, repeatable, and reproducible, and outcomes are clearly communicated and understood.
+> (Boden and McKendrick 2017)
 
-TRACE 7 is quoted at OR-01; TRACE 6 and the Abbott et al. passage on predictive checks at OR-19.
+### OR-25 Model evaluation and comparison
+
+TRACE 6 and the Abbott et al. passage on predictive checks are quoted at OR-18.
+
+> (1) How sensitive model output is to changes in model parameters (sensitivity analysis), and (2) how well the emergence of model output has been understood.
+> (TRACE 7, model analysis)
 
 > Describe how candidate models were evaluated and how the final model(s) were selected.
 > (GATHER 11)
@@ -609,6 +629,10 @@ PLOS ONE 2022;17(10):e0275380.
 PHIA. Professional Head of Intelligence Assessment probability yardstick, in Explaining uncertainty in UK intelligence assessment.
 UK Government.
 Seven probability bands, and the distinction between probability and analytical confidence.
+
+van der Bles AM, van der Linden S, Freeman ALJ, Mitchell J, Galvao AB, Zaval L, Spiegelhalter DJ.
+Communicating uncertainty about facts, numbers and science.
+Royal Society Open Science 2019;6:181870.
 
 Hadley L, Rich C, Tasker A, Restif O, Funk S.
 Visual preferences for communicating modelling: a global analysis of COVID-19 policy and decision makers.
