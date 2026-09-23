@@ -19,31 +19,31 @@ Secondary readers are modelling peers and the press.
 
 | Id    | Theme                     | Applies to    | Summary                                                          | Sources                                                    |
 |-------|---------------------------|---------------|------------------------------------------------------------------|------------------------------------------------------------|
-| OR-01 | Structure                 | Both          | A non-technical and a technical document, linked; diagnostics technical | ISPOR-7, TRACE, GATHER                              |
-| OR-02 | Scope and purpose         | Non-technical | What the estimate is for and which decisions it supports         | GATHER 1, EPIFORGE 2, TRACE 1, ISPOR-7                     |
+| OR-01 | Structure                 | Both          | A non-technical and a technical document, linked; diagnostics technical | GATHER, TRACE, Whitty, Boden; split added           |
+| OR-02 | Scope and purpose         | Non-technical | What the estimate is for and which decisions it supports         | GATHER 1, EPIFORGE 2, TRACE 1                              |
 | OR-03 | Scope and purpose         | Non-technical | What the estimate should not be used for                         | TRACE 1, Abbott                                            |
 | OR-04 | Scope and purpose         | Non-technical | Each quantity defined, with its reference date, before first use | GATHER 1, ORBIT, Gostic; ordering added                    |
 | OR-05 | Data and inputs           | Non-technical | Each data source named, with its biases, and the data shown      | GATHER 5, 6, TRACE 3, ORBIT 1-6, Charniga, Hadley          |
 | OR-06 | Estimates and uncertainty | Non-technical | A small, named, stable set of headline estimates                 | GATHER 1, Hadley; bounding added                           |
 | OR-07 | Estimates and uncertainty | Non-technical | An interval per headline estimate, its level and meaning stated  | GATHER 16, EPIFORGE 14, Charniga, Padilla, Hadley          |
-| OR-08 | Estimates and uncertainty | Non-technical | Kinds of uncertainty included and excluded, structural included  | GATHER 13, ISPOR-6, IPCC, McCabe, Gostic, WHO 2017         |
-| OR-09 | Estimates and uncertainty | Non-technical | Confidence in the estimate, on a stated scale, with reasons      | WHO 2012, IPCC, GRADE, PHIA; transfer added                |
-| OR-10 | Estimates and uncertainty | Non-technical | Probability words taken from a stated scale                      | PHIA, IPCC; transfer added                                 |
+| OR-08 | Estimates and uncertainty | Non-technical | Kinds of uncertainty included and excluded, structural included  | GATHER 13, Thorén, den Boon, Howerton, Becker, IPCC, McCabe, Gostic, WHO 2017 |
+| OR-09 | Estimates and uncertainty | Non-technical | Confidence in the estimate, on a stated scale, with reasons      | WHO 2012, CDC CFA, SPI-M-O, IPCC, GRADE, PHIA              |
+| OR-10 | Estimates and uncertainty | Non-technical | Probability words taken from a stated scale                      | PHIA, SPI-M-O, IPCC                                        |
 | OR-11 | Interpretation            | Non-technical | Results summarised in non-technical terms                        | EPIFORGE 15, TRACE, Hadley                                 |
-| OR-12 | Interpretation            | Non-technical | Limitations that affect interpretation                           | GATHER 18, EPIFORGE 17, ISPOR-7                            |
+| OR-12 | Interpretation            | Non-technical | Limitations that affect interpretation                           | GATHER 18, EPIFORGE 17                                     |
 | OR-13 | Interpretation            | Non-technical | Implications for public health action                            | EPIFORGE 18, WHO 2012                                      |
 | OR-14 | Currency and change       | Non-technical | Date the data were current to                                    | WHO 2025, EPIFORGE 4; date added                           |
 | OR-15 | Currency and change       | Non-technical | Most recent estimates flagged as provisional                     | Gostic, Charniga, WHO 2025                                 |
 | OR-16 | Currency and change       | Non-technical | Update frequency and next update                                 | ORBIT 7; stating it added                                  |
 | OR-17 | Currency and change       | Non-technical | How and why the estimate changed since the last update           | GATHER 17, Abbott, WHO 2025                                |
 | OR-18 | Currency and change       | Non-technical | Same presentation between updates, or the change announced       | Hadley, ORBIT                                              |
-| OR-19 | Performance               | Non-technical | How well the model reproduces the data it was fitted to          | TRACE 6, ISPOR-7, GATHER 12, Abbott                        |
+| OR-19 | Performance               | Non-technical | How well the model reproduces the data it was fitted to          | TRACE 6, GATHER 12, Abbott                                 |
 | OR-20 | Performance               | Non-technical | How past forecasts performed against a comparator                | EPIFORGE 11, 12, TRACE 8; placement added                  |
 | OR-21 | Access                    | Non-technical | Estimates downloadable as versioned data                         | GATHER 15, EPIFORGE 16                                     |
-| OR-22 | Access                    | Non-technical | Where the code is                                                | GATHER 14, EPIFORGE 9, Abbott, Charniga                    |
-| OR-23 | Access                    | Non-technical | Authors and funders named                                        | GATHER 2, ISPOR-7                                          |
+| OR-22 | Access                    | Non-technical | Where the code is                                                | GATHER 14, EPIFORGE 9, Abbott, Charniga, Becker, Zavalis   |
+| OR-23 | Access                    | Non-technical | Authors and funders named                                        | GATHER 2, Zavalis, Boden                                   |
 | OR-24 | Access                    | Non-technical | How to raise a correction or question                            | Added                                                      |
-| OR-25 | Methods                   | Technical     | Methods, including key epidemiological inputs, enough to reproduce | GATHER 10, EPIFORGE 3, ISPOR-7, TRACE 2, Gostic, Charniga, Abbott |
+| OR-25 | Methods                   | Technical     | Methods, including key epidemiological inputs, enough to reproduce | GATHER 10, EPIFORGE 3, TRACE 2, Gostic, Charniga, Abbott |
 | OR-26 | Methods                   | Technical     | How the model was evaluated, checked and compared                | GATHER 11, 12, EPIFORGE 10, TRACE 6, 7, Abbott             |
 
 ## Structure
@@ -60,7 +60,7 @@ It carries no diagnostic output beyond that link.
 
 A reader who does not develop models cannot act on a diagnostic.
 
-Basis: ISPOR-7, TRACE, GATHER. Keeping diagnostics technical: added, from the reader.
+Basis: GATHER, TRACE, Whitty, Boden and McKendrick. Splitting into two documents: added, from GATHER's two audiences. Keeping diagnostics technical: Whitty, and the reader.
 
 ## Scope and purpose
 
@@ -70,7 +70,7 @@ Recommendation: the report states what the estimate is for and which decisions i
 
 Check: a sentence names the quantity estimated, its population, place and period, and a decision or use it informs.
 
-Basis: GATHER 1, EPIFORGE 2, TRACE 1, ISPOR-7.
+Basis: GATHER 1, EPIFORGE 2, TRACE 1.
 
 ### OR-03 Domain of applicability
 
@@ -140,7 +140,7 @@ An included list alone is partly met.
 An interval covers only the uncertainty the model represents.
 Uncertainty about the model's own structure sits outside any single model's interval, so it has to be stated separately.
 
-Basis: GATHER 13, ISPOR-SMDM Task Force-6, IPCC, McCabe et al., Gostic et al., WHO 2017.
+Basis: GATHER 13, Thorén and Gerlee, den Boon et al., Howerton et al., Becker et al., IPCC, McCabe et al., Gostic et al., WHO 2017.
 
 ### OR-09 Confidence statement
 
@@ -154,11 +154,14 @@ It is distinct from the probability of an outcome (OR-10) and from the numeric i
 
 Published scales, any of which can be used:
 
+- CDC Center for Forecasting and Outbreak Analytics: low, moderate or high, set by the quality and amount of evidence and how well lines of evidence corroborate one another. Used for real-time outbreak risk and scenario assessments.
 - WHO rapid risk assessment: a descriptive scale from very low to very high, set by the reliability, completeness and quality of the information and the assumptions made.
 - IPCC: five levels (very low, low, medium, high, very high), assigned by rating the evidence (limited, medium, robust) and the agreement between lines of evidence (low, medium, high). This is the most structured route and leaves a traceable account.
 - GRADE: four levels of certainty (high, moderate, low, very low), for a body of evidence rather than a single model estimate.
 
-Basis: WHO rapid risk assessment manual, IPCC, GRADE, PHIA. Transfer to a model estimate: added.
+A confidence level can sit alongside a probability word: SPI-M-O wrote that it considered a finding "likely, with low confidence".
+
+Basis: WHO rapid risk assessment manual, CDC CFA, SPI-M-O, IPCC, GRADE, PHIA.
 
 ### OR-10 Verbal probability on a defined scale
 
@@ -169,7 +172,7 @@ Not applicable where the report gives no probability in words.
 
 A published scale narrows the spread in how readers interpret probability words, without closing it.
 
-Basis: PHIA probability yardstick, IPCC likelihood scale. Transfer to outbreak reporting: added.
+Basis: PHIA probability yardstick, as used by SPI-M-O; IPCC likelihood scale.
 
 ## Interpretation
 
@@ -189,7 +192,7 @@ Recommendation: the report states its limitations, including the modelling assum
 
 Check: at least one assumption and one data limitation, each with what it does to interpretation.
 
-Basis: GATHER 18, EPIFORGE 17, ISPOR-7.
+Basis: GATHER 18, EPIFORGE 17.
 
 ### OR-13 Implications for action
 
@@ -263,7 +266,7 @@ Detail of the checks used belongs in the technical document (OR-26).
 A model that cannot reproduce its own data is not credible.
 Good fit is weaker evidence than good prediction, because the data were used to fit the model.
 
-Basis: TRACE 6, ISPOR-7, GATHER 12, Abbott et al.
+Basis: TRACE 6, GATHER 12, Abbott et al.
 
 ### OR-20 Predictive performance
 
@@ -291,7 +294,7 @@ Recommendation: the analysis code is accessible, and the report says where.
 
 Check: a working link to the code, or a stated reason it is not available.
 
-Basis: GATHER 14, EPIFORGE 9, Abbott et al., Charniga et al.
+Basis: GATHER 14, EPIFORGE 9, Abbott et al., Charniga et al., Becker et al., Zavalis and Ioannidis.
 
 ### OR-23 Authorship and funding
 
@@ -299,7 +302,7 @@ Recommendation: the report names its authors and its funding sources.
 
 Check: authors or the responsible team, and funders, are named.
 
-Basis: GATHER 2, ISPOR-7.
+Basis: GATHER 2, Zavalis and Ioannidis, Boden and McKendrick.
 
 ### OR-24 Contact and feedback route
 
@@ -320,7 +323,7 @@ Model equations, data processing steps, and priors or fixed parameters are state
 Each delay or generation-interval distribution is given with its form, parameters, uncertainty and source.
 Full reproduction is outside the check.
 
-Basis: GATHER 10, EPIFORGE 3, ISPOR-7, TRACE 2, Gostic et al., Charniga et al., Abbott et al.
+Basis: GATHER 10, EPIFORGE 3, TRACE 2, Gostic et al., Charniga et al., Abbott et al.
 
 ### OR-26 Model evaluation and comparison
 

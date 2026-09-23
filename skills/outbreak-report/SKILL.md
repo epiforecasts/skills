@@ -1,6 +1,6 @@
 ---
 name: outbreak-report
-description: Check a published or draft report of a modelled outbreak estimate (nowcast, forecast, outbreak size, reproduction number) that is republished as data arrive, against a sourced list of reporting items drawn from GATHER, EPIFORGE, ISPOR-7, TRACE, WHO outbreak guidance and Rt and delay-estimation best practice. Returns which items are met, with evidence from the report, and offers an alternative wording or layout for each gap. Use when reviewing a situation report, dashboard or summary page that presents model estimates to responders.
+description: Check a published or draft report of a modelled outbreak estimate (nowcast, forecast, outbreak size, reproduction number) that is republished as data arrive, against a sourced list of reporting items drawn from GATHER, EPIFORGE, TRACE, WHO outbreak guidance, and infectious disease modelling and Rt and delay-estimation best practice. Returns which items are met, with evidence from the report, and offers an alternative wording or layout for each gap. Use when reviewing a situation report, dashboard or summary page that presents model estimates to responders.
 ---
 
 # Outbreak report check

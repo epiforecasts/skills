@@ -6,10 +6,12 @@ Where a source is cited without quotation, the entry says so.
 
 ## Scope
 
-The items adapt GATHER, EPIFORGE 2020, ISPOR-SMDM Task Force-7 and TRACE, which assume a document published once, to a report that is republished.
+The items adapt GATHER, EPIFORGE 2020 and TRACE, which assume a document published once, to a report that is republished.
 OR-15, OR-16, OR-17 in its real-time form, OR-18 and part of OR-14 arise only on republication.
 Gostic et al., Charniga et al. and Abbott et al. supply the practice specific to real-time transmission and delay estimation.
 WHO guidance on risk assessment and on communicating uncertainty supplies the practice specific to outbreak response.
+CDC's Center for Forecasting and Outbreak Analytics and the UK's SPI-M-O show confidence and probability scales in use for real-time outbreak assessment.
+Where a general modelling source and an infectious-disease source say the same thing, the infectious-disease source is cited.
 
 ORBIT sets a minimum standard for the surveillance counts an authority publishes, and carries no item on a modelled estimate.
 It is cited here for the counts a model takes as input (OR-05), for reporting cadence (OR-16), for the date a count refers to (OR-04), and for consistency between reports (OR-18).
@@ -23,9 +25,11 @@ GATHER names two audiences and separates what each needs:
 > They also need an explanation of how new estimates compare to previously published estimates, including why they differ.
 > Researchers require a higher degree of detail about methods, so that they can fully understand and potentially reproduce studies and advance methods.
 
-ISPOR-7 sets no expertise requirement for the non-technical document:
+Whitty, from the side of the policy reader:
 
-> Nontechnical documentation should be accessible to any interested reader.
+> Sensible policymakers prefer a paper they understand, including its flaws, to one they do not, however sophisticated and apparently precise it looks.
+> It is possible to be simple whilst being rigorous.
+> (Whitty 2015)
 
 Hadley et al. interviewed policy and decision makers and science advisors in 13 countries about modelled COVID-19 evidence.
 The reader evidence cited below comes from that population.
@@ -34,22 +38,23 @@ The reader evidence cited below comes from that population.
 
 ### OR-01 Two documents
 
-ISPOR-7 defines the split:
+Splitting the report into two documents is added.
+It follows from GATHER's two audiences, quoted under Reader, who need different levels of detail, and from Boden and McKendrick's definition of transparency, which asks both for reproducible methods and for results that are understood:
 
-> A nontechnical description should be made available to anyone — including model type and intended applications; funding sources; structure; inputs, outputs, other components that determine function, and their relationships; data sources; validation methods and results; and limitations.
-> Technical documentation, written in sufficient detail to enable a reader with necessary expertise to evaluate the model and potentially reproduce it, should be made available openly or under agreements that protect intellectual property.
+> Transparency refers to the clear documentation of the scientific approach so that methods are robust, repeatable, and reproducible, and outcomes are clearly communicated and understood.
+> (Boden and McKendrick 2017)
 
 TRACE states the reading order the split assumes:
 
 > Readers will first want to see an overview and only then decide whether and where to go into more detail.
 > \[...\] In general, summaries should always come first and details later.
 
-GATHER's two audiences, quoted under Reader, need different levels of detail.
+Keeping diagnostics technical rests mainly on the reader, who does not develop models and cannot act on a diagnostic.
+Whitty describes the cost of leaving them in:
 
-Keeping diagnostics technical is added.
-The ISPOR-7 non-technical list contains validation results but no diagnostics.
-The list is indicative ("including"), so its silence is weak support.
-The main reason is the reader, who does not develop models and cannot act on a diagnostic.
+> Authors, referees and editors can transform papers making a simple point using methods easily understood by policymakers into Baroque complexity understood only by modelers or statisticians by insisting on using techniques irrelevant to the key policy message which only add a spurious level of precision.
+> (Whitty 2015)
+
 TRACE places sensitivity analysis in model analysis, a technical element:
 
 > (1) How sensitive model output is to changes in model parameters (sensitivity analysis), and (2) how well the emergence of model output has been understood.
@@ -57,7 +62,7 @@ TRACE places sensitivity analysis in model analysis, a technical element:
 
 ### OR-02 Purpose and intended use
 
-All four guidelines place it first. ISPOR-7: "model type and intended applications", quoted at OR-01.
+All three guidelines place it first.
 
 > Define the indicator(s), populations (including age, sex, and geographic entities), and time period(s) for which estimates were made.
 > (GATHER 1)
@@ -164,7 +169,9 @@ Charniga et al. note the levels usually used, and ask for the level to be report
 
 ### OR-08 Kinds of uncertainty included and excluded
 
-The kinds named in the item follow ISPOR-SMDM Task Force-6, adapted to outbreak data: observation and reporting (Gostic et al.), parameters, chance (McCabe et al.), and model structure.
+The kinds named in the item come from the infectious-disease modelling literature: data and reporting (Gostic et al., Becker et al.), parameters and model structure (Howerton et al.), and chance (McCabe et al.).
+Thorén and Gerlee explain why structure has to be stated separately: an interval is conditional on the chosen model.
+den Boon et al. ask for the sources of uncertainty to be reported, and for the degree to which they were explored.
 IPCC asks for the role of structural uncertainty to be stated whenever a range is given.
 
 > Describe methods of calculating uncertainty of the estimates.
@@ -178,8 +185,21 @@ IPCC asks for the role of structural uncertainty to be stated whenever a range i
 > Communication by authorities to the public should include explicit information about uncertainties associated with risks, events and interventions, and indicate what is known and not known at a given time.
 > (WHO 2017, recommendation A.2, communicating uncertainty; strong recommendation, moderate quality evidence)
 
-> Stochastic (first-order) uncertainty is distinguished from both parameter (second-order) uncertainty and from heterogeneity, with structural uncertainty relating to the model itself forming another level of uncertainty to consider.
-> (ISPOR-SMDM Task Force-6, abstract)
+> The confidence intervals represent some set of uncertainties that remain once we have disregarded some other set of uncertainties, such as for example structural uncertainties, problems with the data, and so on.
+> (Thorén and Gerlee 2024)
+
+> Modellers should clearly report the sources of uncertainty for the individual models and the degree to which models have explored uncertainty.
+> (den Boon et al. 2019)
+
+> Our simulations capture uncertainty about both model parameters (i.e. parametric uncertainty) and model structure (i.e. structural uncertainty).
+> (Howerton et al. 2023)
+
+> incorporate uncertainty in the data, including report processes if possible, into modelling results.
+> Consider how biases in the data would propagate through to model outcomes
+> (Becker et al. 2021, Table)
+
+> where available, participate in modelling consortia or other collaborative modelling efforts to confront and explore assumptions in model structure and data uncertainty
+> (Becker et al. 2021, Table)
 
 > State any assumptions made and estimate the role of structural uncertainties.
 > (IPCC 2010, paragraph 11)
@@ -193,7 +213,15 @@ IPCC asks for the role of structural uncertainty to be stated whenever a range i
 ### OR-09 Confidence statement
 
 WHO assesses a public health risk rather than a model estimate, so its descriptive scale transfers and its hazard, exposure and context structure does not.
-The transfer is added.
+Two outbreak bodies apply confidence levels in real time.
+CDC's Center for Forecasting and Outbreak Analytics assigns low, moderate or high confidence to its risk and scenario assessments, from the same two things IPCC uses: the quality and amount of evidence, and how well lines of evidence agree.
+SPI-M-O, advising the UK government on COVID-19, paired a PHIA probability word with a confidence level in a single modelling judgement.
+
+> We also assign confidence levels to each of our assessments, based on the quality and amount of evidence that underpins the assessment, as well as how well different lines of evidence corroborate one another.
+> (CDC CFA, risk assessment methods)
+
+> SPI-M-O considers it likely, with low confidence, that it is slightly shorter for omicron.
+> (SPI-M-O, 6 January 2022, paragraph 9)
 
 > It is important to document the risk assessment team's level of confidence in the assessment and the reasons for any limitations.
 > This will depend on the reliability, completeness and quality of the information used, and the underlying assumptions made with respect to the hazard, exposure and context.
@@ -222,9 +250,17 @@ GRADE rates a body of evidence rather than a model output, so it fits best where
 > Based on the answers to these questions, an expression of certainty in the body of evidence can be articulated (GRADE uses four levels of certainty: high, moderate, low, and very low).
 > (Schünemann et al. 2020)
 
+Guyatt et al. 2008 set out how GRADE rates quality of evidence; cited without quotation.
+
 ### OR-10 Verbal probability on a defined scale
 
-The yardstick is UK intelligence practice rather than health reporting; the transfer is added.
+The yardstick comes from UK intelligence practice.
+SPI-M-O adopted it for its COVID-19 consensus statements, and stated so in each statement:
+
+> All probability statements are in line with the framework given in Annex 2.
+> \[...\] Annex 2: PHIA framework of language for discussing probabilities
+> (SPI-M-O, 6 January 2022)
+
 It is one published scale among several; the IPCC likelihood scale, below, is another.
 
 > 0% - \~5%: Remote Chance.
@@ -260,7 +296,6 @@ TRACE's summary-first ordering is quoted at OR-01.
 
 ### OR-12 Limitations
 
-ISPOR-7 lists "limitations" in the non-technical description, quoted at OR-01.
 
 > Discuss limitations of the estimates.
 > Include a discussion of any modelling assumptions or data limitations that affect interpretation of the estimates.
@@ -360,15 +395,11 @@ ORBIT asks for it between jurisdictions and over time.
 
 ### OR-19 Fit to the data
 
-ISPOR-7 names comparison with real-world results (external validity) and with prospectively observed events (predictive validity) as the two strongest forms of validation.
-OR-19 is the first, OR-20 the second.
+Fit to the data used in fitting (OR-19) and performance against data not yet seen (OR-20) are different evidence.
+TRACE separates them (TRACE 6 here, TRACE 8 at OR-20).
 
 > (1) How well model output matches observations and (2) how much calibration and effects of environmental drivers were involved in obtaining good fits of model output and data.
 > (TRACE 6, model output verification)
-
-> Validation involves face validity (wherein experts evaluate model structure, data sources, assumptions, and results), verification or internal validity (check accuracy of coding), cross validity (comparison of results with other models analyzing the same problem), external validity (comparing model results with real-world results), and predictive validity (comparing model results with prospectively observed events).
-> The last two are the strongest form of validation.
-> (ISPOR-7, abstract)
 
 > We use posterior- and mixed-predictive checks \[...\] to assess whether fitted models reproduce key features across all integrated sources.
 > These checks form the foundation of model validation by comparing model-generated predictions against observed patterns.
@@ -412,9 +443,18 @@ TRACE separates agreement with the data used in fitting from comparison against 
 > Code and data should be uploaded to repositories, such as GitHub (https://github.com/) or Zenodo (https://zenodo.org/), to ensure reproducibility of the analysis and facilitate re-use of the code.
 > (Charniga et al.)
 
+> Make model code publicly accessible and easily reproducible; publish results publicly (eg, through preprint servers)
+> (Becker et al. 2021, Table)
+
+Zavalis and Ioannidis, quoted at OR-23, found code sharing among the indispensable transparency indicators for infectious disease models.
+
 ### OR-23 Authorship and funding
 
-ISPOR-7 lists "funding sources" in the non-technical description, quoted at OR-01.
+> Data and code sharing are indispensable for reproducing them, protocol registration may be useful sometimes, and declarations of conflicts of interest (COIs) and of funding are quintessential for transparency.
+> (Zavalis and Ioannidis 2022, on infectious disease models)
+
+> This documentation includes information about conflicts of interest, constraints, or biases affecting data collection and interpretation \[...\]
+> (Boden and McKendrick 2017)
 
 > List the funding sources for the work.
 > (GATHER 2)
@@ -426,7 +466,6 @@ GATHER 5 (quoted at OR-05) requires a contact for data that cannot be shared, a 
 
 ### OR-25 Methods sufficient to reproduce
 
-ISPOR-7's technical documentation requirement is quoted at OR-01.
 
 > Provide a detailed description of all steps of the analysis, including mathematical formulae.
 > This description should cover, as relevant, data cleaning, data pre-processing, data adjustments and weighting of data sources, and mathematical or statistical model(s).
@@ -477,11 +516,6 @@ Recommended reporting items for epidemic forecasting and prediction research: Th
 PLOS Medicine 2021;18(10):e1003793.
 19 items, Delphi with 46 panellists. Quotations are from Table 1.
 
-ISPOR-7. Eddy DM, Hollingworth W, Caro JJ, et al.
-Model Transparency and Validation: A Report of the ISPOR-SMDM Modeling Good Research Practices Task Force-7.
-Value in Health 2012;15(6):843-850.
-Quotations are from the abstract and from the Transparency section, under "Nontechnical Documentation" and "Public Versus Confidential Documentation".
-
 TRACE. Grimm V, Augusiak J, Focks A, et al.
 Towards better modelling and decision support: Documenting model development, testing, and analysis using TRACE.
 Ecological Modelling 2014;280:129-139.
@@ -518,11 +552,6 @@ Quotation is recommendation A.2.
 WHO 2025. Communicating uncertainty in health emergencies: guidance and tips.
 Copenhagen: WHO Regional Office for Europe, 2025.
 
-ISPOR-6. Briggs AH, Weinstein MC, Fenwick EA, et al.
-Model Parameter Estimation and Uncertainty: A Report of the ISPOR-SMDM Modeling Good Research Practices Task Force-6.
-Value in Health 2012;15(6):835-842.
-Quotation is from the abstract.
-
 IPCC 2010. Mastrandrea MD, Field CB, Stocker TF, et al.
 Guidance Note for Lead Authors of the IPCC Fifth Assessment Report on Consistent Treatment of Uncertainties.
 Intergovernmental Panel on Climate Change, 2010.
@@ -534,6 +563,48 @@ Journal of Clinical Epidemiology 2020;127:202-207.
 McCabe R, Kont MD, Schmit N, et al.
 Communicating uncertainty in epidemic models.
 Epidemics 2021;37:100520.
+
+Guyatt GH, Oxman AD, Kunz R, et al.
+What is "quality of evidence" and why is it important to clinicians?
+BMJ 2008;336:995-998.
+Cited without quotation.
+
+CDC CFA. Centers for Disease Control and Prevention, Center for Forecasting and Outbreak Analytics.
+How CFA Conducts Risk Assessments; How CFA Sets Confidence Levels.
+Web pages, last reviewed 16 December 2025.
+
+SPI-M-O. Scientific Pandemic Influenza Group on Modelling, Operational sub-group.
+SPI-M-O: Consensus statement on COVID-19, 6 January 2022.
+GOV.UK, published 14 January 2022.
+
+Thorén H, Gerlee P.
+Model uncertainty, the COVID-19 pandemic, and the science-policy interface.
+Royal Society Open Science 2024;11:230803.
+
+den Boon S, Jit M, Brisson M, et al.
+Guidelines for multi-model comparisons of the impact of infectious disease interventions.
+BMC Medicine 2019;17:163.
+
+Howerton E, Runge MC, Bogich TL, et al.
+Context-dependent representation of within- and between-model uncertainty: aggregating probabilistic predictions in infectious disease epidemiology.
+Journal of the Royal Society Interface 2023;20:20220659.
+
+Becker AD, Grantz KH, Hegde ST, et al.
+Development and dissemination of infectious disease dynamic transmission models during the COVID-19 pandemic: what can we learn from other pathogens and how can we move forward?
+Lancet Digital Health 2021;3:e41-50.
+Quotations are from the table of recommendations.
+
+Whitty CJM.
+What makes an academic paper useful for health policy?
+BMC Medicine 2015;13:301.
+
+Boden LA, McKendrick IJ.
+Model-Based Policymaking: A Framework to Promote Ethical "Good Practice" in Mathematical Modeling for Public Health Policymaking.
+Frontiers in Public Health 2017;5:68.
+
+Zavalis EA, Ioannidis JPA.
+A meta-epidemiological assessment of transparency indicators of infectious disease models.
+PLOS ONE 2022;17(10):e0275380.
 
 PHIA. Professional Head of Intelligence Assessment probability yardstick, in Explaining uncertainty in UK intelligence assessment.
 UK Government.
