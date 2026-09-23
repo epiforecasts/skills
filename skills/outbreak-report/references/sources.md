@@ -135,12 +135,16 @@ GATHER 1 requires each indicator to be defined but does not bound the set; bound
 > Streamlining advice by presenting modelling findings in terms of these more operational concepts (doubling time, time to X, hospitalisations, deaths) was preferred in a few different settings.
 > (Hadley et al. 2025)
 
-### OR-07 Headline estimate with one interval
+### OR-07 Headline estimate with an interval
 
-The guidelines require an interval and do not say how many levels.
-Restricting the headline to one level is added, for legibility.
-The reader evidence does not show that one level improves understanding: Padilla et al. found readers did not scale trust to interval width, and the single 95% interval they trusted most gave the least accurate predictions.
+The guidelines require an interval and do not say which level or how many.
+An earlier draft restricted the headline to one level; no source supports that, and it was dropped.
+Padilla et al. found readers did not scale trust to interval width, and the single 95% interval they trusted most gave the least accurate predictions.
 That is why the item asks for the meaning of the interval in words, not only its level.
+Charniga et al. note the levels usually used, and ask for the level to be reported.
+
+> All summary statistics should always be accompanied by credible intervals or confidence intervals for Bayesian and frequentist analyses, respectively (usually 90% or 95% with the width of the reported interval also being reported).
+> (Charniga et al.)
 
 > Report a quantitative measure of the uncertainty of the estimates (e.g., uncertainty intervals).
 > (GATHER 16)
@@ -158,7 +162,10 @@ That is why the item asks for the meaning of the interval in words, not only its
 > diagrams with extremely wide confidence intervals were not helpful, dubbed "crayon diagrams" - diagrams with huge uncertainty that could have been drawn with a crayon.
 > (Hadley et al. 2025)
 
-### OR-08 Sources of uncertainty included and excluded
+### OR-08 Kinds of uncertainty included and excluded
+
+The kinds named in the item follow ISPOR-SMDM Task Force-6, adapted to outbreak data: observation and reporting (Gostic et al.), parameters, chance (McCabe et al.), and model structure.
+IPCC asks for the role of structural uncertainty to be stated whenever a range is given.
 
 > Describe methods of calculating uncertainty of the estimates.
 > State which sources of uncertainty were, and were not, accounted for in the uncertainty analysis.
@@ -170,6 +177,18 @@ That is why the item asks for the meaning of the interval in words, not only its
 
 > Communication by authorities to the public should include explicit information about uncertainties associated with risks, events and interventions, and indicate what is known and not known at a given time.
 > (WHO 2017, recommendation A.2, communicating uncertainty; strong recommendation, moderate quality evidence)
+
+> Stochastic (first-order) uncertainty is distinguished from both parameter (second-order) uncertainty and from heterogeneity, with structural uncertainty relating to the model itself forming another level of uncertainty to consider.
+> (ISPOR-SMDM Task Force-6, abstract)
+
+> State any assumptions made and estimate the role of structural uncertainties.
+> (IPCC 2010, paragraph 11)
+
+> Uncertainty can also be introduced into simulations via the use of stochastic models, which, unlike deterministic models, incorporate the effects of random chance and are inherently 'noisy'.
+> (McCabe et al. 2021)
+
+> The combination of two sources of uncertainty lead to much greater variation in trajectories than that which is observed under the models with a single source of uncertainty.
+> (McCabe et al. 2021)
 
 ### OR-09 Confidence statement
 
@@ -187,10 +206,26 @@ The transfer is added.
 > Whereas probability reflects the likelihood that a statement is true, analytical confidence reflects the soundness and stability of the foundations on which the assessment of likelihood has been made.
 > (PHIA)
 
+IPCC gives the most structured route: rate the evidence and the agreement, then assign a level, and record how.
+
+> Use the following dimensions to evaluate the validity of a finding: the type, amount, quality, and consistency of evidence (summary terms: "limited," "medium," or "robust"), and the degree of agreement (summary terms: "low," "medium," or "high").
+> \[...\] Provide a traceable account describing your evaluation of evidence and agreement in the text of your chapter.
+> (IPCC 2010, paragraph 8)
+
+> A level of confidence is expressed using five qualifiers: "very low," "low," "medium," "high," and "very high."
+> It synthesizes the author teams' judgments about the validity of findings as determined through evaluation of evidence and agreement.
+> \[...\] Confidence should not be interpreted probabilistically, and it is distinct from "statistical confidence."
+> (IPCC 2010, paragraph 9)
+
+GRADE rates a body of evidence rather than a model output, so it fits best where the estimate rests on external evidence (for example a delay distribution taken from the literature).
+
+> Based on the answers to these questions, an expression of certainty in the body of evidence can be articulated (GRADE uses four levels of certainty: high, moderate, low, and very low).
+> (Schünemann et al. 2020)
+
 ### OR-10 Verbal probability on a defined scale
 
 The yardstick is UK intelligence practice rather than health reporting; the transfer is added.
-It is one published scale among several.
+It is one published scale among several; the IPCC likelihood scale, below, is another.
 
 > 0% - \~5%: Remote Chance.
 > \~10% - \~20%: Highly Unlikely.
@@ -203,6 +238,15 @@ It is one published scale among several.
 
 > The application of a standard process and terminology reduces or mitigates subjectivity in the evaluation process, enabling consistency in how the relative strengths and limitations of an assessment are identified, explained and communicated.
 > (PHIA)
+
+> Virtually certain 99-100% probability.
+> Very likely 90-100% probability.
+> Likely 66-100% probability.
+> About as likely as not 33 to 66% probability.
+> Unlikely 0-33% probability.
+> Very unlikely 0-10% probability.
+> Exceptionally unlikely 0-1% probability.
+> (IPCC 2010, Table 1)
 
 ### OR-11 Non-technical summary of results
 
@@ -314,7 +358,25 @@ ORBIT asks for it between jurisdictions and over time.
 > Therefore, we encourage coordination among public health authorities to maintain uniformity and comparability of reporting.
 > (ORBIT, discussion)
 
-### OR-19 Predictive performance
+### OR-19 Fit to the data
+
+ISPOR-7 names comparison with real-world results (external validity) and with prospectively observed events (predictive validity) as the two strongest forms of validation.
+OR-19 is the first, OR-20 the second.
+
+> (1) How well model output matches observations and (2) how much calibration and effects of environmental drivers were involved in obtaining good fits of model output and data.
+> (TRACE 6, model output verification)
+
+> Validation involves face validity (wherein experts evaluate model structure, data sources, assumptions, and results), verification or internal validity (check accuracy of coding), cross validity (comparison of results with other models analyzing the same problem), external validity (comparing model results with real-world results), and predictive validity (comparing model results with prospectively observed events).
+> The last two are the strongest form of validation.
+> (ISPOR-7, abstract)
+
+> We use posterior- and mixed-predictive checks \[...\] to assess whether fitted models reproduce key features across all integrated sources.
+> These checks form the foundation of model validation by comparing model-generated predictions against observed patterns.
+> (Abbott et al., section 3.9.4)
+
+GATHER 12 is quoted at OR-26.
+
+### OR-20 Predictive performance
 
 EPIFORGE places the evaluation in the methods of a study; surfacing the result in the non-technical document is added.
 TRACE separates agreement with the data used in fitting from comparison against data not used, and only the second is evidence of prediction.
@@ -328,7 +390,7 @@ TRACE separates agreement with the data used in fitting from comparison against 
 > How model predictions compare to independent data and patterns that were not used, and preferably not even known, while the model was developed, parameterized, and verified.
 > (TRACE 8, model output corroboration)
 
-### OR-20 Estimates available as data
+### OR-21 Estimates available as data
 
 > Provide published estimates in a file format from which data can be efficiently extracted.
 > (GATHER 15)
@@ -336,7 +398,7 @@ TRACE separates agreement with the data used in fitting from comparison against 
 > If results are published as a data object, encourage a time-stamped version number.
 > (EPIFORGE 16)
 
-### OR-21 Code available
+### OR-22 Code available
 
 > State how analytic or statistical source code used to generate estimates can be accessed.
 > (GATHER 14)
@@ -350,19 +412,19 @@ TRACE separates agreement with the data used in fitting from comparison against 
 > Code and data should be uploaded to repositories, such as GitHub (https://github.com/) or Zenodo (https://zenodo.org/), to ensure reproducibility of the analysis and facilitate re-use of the code.
 > (Charniga et al.)
 
-### OR-22 Authorship and funding
+### OR-23 Authorship and funding
 
 ISPOR-7 lists "funding sources" in the non-technical description, quoted at OR-01.
 
 > List the funding sources for the work.
 > (GATHER 2)
 
-### OR-23 Contact and feedback route
+### OR-24 Contact and feedback route
 
 No published source found. Added.
 GATHER 5 (quoted at OR-05) requires a contact for data that cannot be shared, a narrower case.
 
-### OR-24 Methods sufficient to reproduce
+### OR-25 Methods sufficient to reproduce
 
 ISPOR-7's technical documentation requirement is quoted at OR-01.
 
@@ -387,9 +449,9 @@ ISPOR-7's technical documentation requirement is quoted at OR-01.
 > Reporting decisions made at each stage of the workflow is essential, including rationales for data source selection, integration method choices, model structure assumptions, and validation procedures undertaken.
 > (Abbott et al., section 4.2)
 
-### OR-25 Model evaluation and comparison
+### OR-26 Model evaluation and comparison
 
-TRACE 7 is quoted at OR-01.
+TRACE 7 is quoted at OR-01; TRACE 6 and the Abbott et al. passage on predictive checks at OR-19.
 
 > Describe how candidate models were evaluated and how the final model(s) were selected.
 > (GATHER 11)
@@ -455,6 +517,23 @@ Quotation is recommendation A.2.
 
 WHO 2025. Communicating uncertainty in health emergencies: guidance and tips.
 Copenhagen: WHO Regional Office for Europe, 2025.
+
+ISPOR-6. Briggs AH, Weinstein MC, Fenwick EA, et al.
+Model Parameter Estimation and Uncertainty: A Report of the ISPOR-SMDM Modeling Good Research Practices Task Force-6.
+Value in Health 2012;15(6):835-842.
+Quotation is from the abstract.
+
+IPCC 2010. Mastrandrea MD, Field CB, Stocker TF, et al.
+Guidance Note for Lead Authors of the IPCC Fifth Assessment Report on Consistent Treatment of Uncertainties.
+Intergovernmental Panel on Climate Change, 2010.
+
+GRADE. Schünemann HJ, Santesso N, Vist GE, et al.
+Using GRADE in situations of emergencies and urgencies: certainty in evidence and recommendations matters during the COVID-19 pandemic, now more than ever and no matter what.
+Journal of Clinical Epidemiology 2020;127:202-207.
+
+McCabe R, Kont MD, Schmit N, et al.
+Communicating uncertainty in epidemic models.
+Epidemics 2021;37:100520.
 
 PHIA. Professional Head of Intelligence Assessment probability yardstick, in Explaining uncertainty in UK intelligence assessment.
 UK Government.

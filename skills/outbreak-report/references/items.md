@@ -25,10 +25,10 @@ Secondary readers are modelling peers and the press.
 | OR-04 | Scope and purpose         | Non-technical | Each quantity defined, with its reference date, before first use | GATHER 1, ORBIT, Gostic; ordering added                    |
 | OR-05 | Data and inputs           | Non-technical | Each data source named, with its biases, and the data shown      | GATHER 5, 6, TRACE 3, ORBIT 1-6, Charniga, Hadley          |
 | OR-06 | Estimates and uncertainty | Non-technical | A small, named, stable set of headline estimates                 | GATHER 1, Hadley; bounding added                           |
-| OR-07 | Estimates and uncertainty | Non-technical | One interval per headline estimate, its meaning in words         | GATHER 16, EPIFORGE 14, Padilla, Hadley; one level added   |
-| OR-08 | Estimates and uncertainty | Non-technical | Sources of uncertainty included and excluded                     | GATHER 13, Gostic, WHO 2017                                |
-| OR-09 | Estimates and uncertainty | Non-technical | One plain sentence on confidence in the estimate                 | WHO 2012, PHIA; transfer added                             |
-| OR-10 | Estimates and uncertainty | Non-technical | Probability words taken from a stated scale                      | PHIA; transfer added                                       |
+| OR-07 | Estimates and uncertainty | Non-technical | An interval per headline estimate, its level and meaning stated  | GATHER 16, EPIFORGE 14, Charniga, Padilla, Hadley          |
+| OR-08 | Estimates and uncertainty | Non-technical | Kinds of uncertainty included and excluded, structural included  | GATHER 13, ISPOR-6, IPCC, McCabe, Gostic, WHO 2017         |
+| OR-09 | Estimates and uncertainty | Non-technical | Confidence in the estimate, on a stated scale, with reasons      | WHO 2012, IPCC, GRADE, PHIA; transfer added                |
+| OR-10 | Estimates and uncertainty | Non-technical | Probability words taken from a stated scale                      | PHIA, IPCC; transfer added                                 |
 | OR-11 | Interpretation            | Non-technical | Results summarised in non-technical terms                        | EPIFORGE 15, TRACE, Hadley                                 |
 | OR-12 | Interpretation            | Non-technical | Limitations that affect interpretation                           | GATHER 18, EPIFORGE 17, ISPOR-7                            |
 | OR-13 | Interpretation            | Non-technical | Implications for public health action                            | EPIFORGE 18, WHO 2012                                      |
@@ -37,13 +37,14 @@ Secondary readers are modelling peers and the press.
 | OR-16 | Currency and change       | Non-technical | Update frequency and next update                                 | ORBIT 7; stating it added                                  |
 | OR-17 | Currency and change       | Non-technical | How and why the estimate changed since the last update           | GATHER 17, Abbott, WHO 2025                                |
 | OR-18 | Currency and change       | Non-technical | Same presentation between updates, or the change announced       | Hadley, ORBIT                                              |
-| OR-19 | Performance               | Non-technical | How past forecasts performed against a comparator                | EPIFORGE 11, 12, TRACE 8; placement added                  |
-| OR-20 | Access                    | Non-technical | Estimates downloadable as versioned data                         | GATHER 15, EPIFORGE 16                                     |
-| OR-21 | Access                    | Non-technical | Where the code is                                                | GATHER 14, EPIFORGE 9, Abbott, Charniga                    |
-| OR-22 | Access                    | Non-technical | Authors and funders named                                        | GATHER 2, ISPOR-7                                          |
-| OR-23 | Access                    | Non-technical | How to raise a correction or question                            | Added                                                      |
-| OR-24 | Methods                   | Technical     | Methods, including key epidemiological inputs, enough to reproduce | GATHER 10, EPIFORGE 3, ISPOR-7, TRACE 2, Gostic, Charniga, Abbott |
-| OR-25 | Methods                   | Technical     | How the model was evaluated and compared                         | GATHER 11, 12, EPIFORGE 10, TRACE 6, 7                     |
+| OR-19 | Performance               | Non-technical | How well the model reproduces the data it was fitted to          | TRACE 6, ISPOR-7, GATHER 12, Abbott                        |
+| OR-20 | Performance               | Non-technical | How past forecasts performed against a comparator                | EPIFORGE 11, 12, TRACE 8; placement added                  |
+| OR-21 | Access                    | Non-technical | Estimates downloadable as versioned data                         | GATHER 15, EPIFORGE 16                                     |
+| OR-22 | Access                    | Non-technical | Where the code is                                                | GATHER 14, EPIFORGE 9, Abbott, Charniga                    |
+| OR-23 | Access                    | Non-technical | Authors and funders named                                        | GATHER 2, ISPOR-7                                          |
+| OR-24 | Access                    | Non-technical | How to raise a correction or question                            | Added                                                      |
+| OR-25 | Methods                   | Technical     | Methods, including key epidemiological inputs, enough to reproduce | GATHER 10, EPIFORGE 3, ISPOR-7, TRACE 2, Gostic, Charniga, Abbott |
+| OR-26 | Methods                   | Technical     | How the model was evaluated, checked and compared                | GATHER 11, 12, EPIFORGE 10, TRACE 6, 7, Abbott             |
 
 ## Structure
 
@@ -115,37 +116,49 @@ Readers prefer a few operational quantities (doubling time, time to a threshold,
 
 Basis: GATHER 1, Hadley et al. Bounding the set: added.
 
-### OR-07 Headline estimate with one interval
+### OR-07 Headline estimate with an interval
 
-Recommendation: each headline quantity is given with a single uncertainty interval, whose meaning is stated in words at or before first use.
+Recommendation: each headline quantity is given with an uncertainty interval whose level is stated and whose meaning is stated in words at or before first use.
+Where more than one level is shown, every headline quantity uses the same levels.
 
-Check: each headline number has one interval, and a sentence says what the interval means.
+Check: each headline number has an interval with its level, and a sentence says what the interval means.
 
 Readers do not scale their trust to interval width, so the level alone ("95%") does not tell them what the interval means.
-One level keeps the headline legible; it is not shown to improve understanding.
+No source prescribes a level. 90% and 95% are common; a 50% interval shows the range the value most likely falls in.
+Choose the level the reader's decision needs, and keep it between updates (OR-18).
 
-Basis: GATHER 16, EPIFORGE 14, Padilla et al., Hadley et al. One level: added.
+Basis: GATHER 16, EPIFORGE 14, Charniga et al., Padilla et al., Hadley et al.
 
-### OR-08 Sources of uncertainty included and excluded
+### OR-08 Kinds of uncertainty included and excluded
 
-Recommendation: the report states which sources of uncertainty the intervals account for, and which they do not.
+Recommendation: the report states which kinds of uncertainty the intervals include and which they leave out: in the data (for example incomplete or delayed reporting), in the parameters, from chance, and in the model's structure and assumptions.
+Where structural uncertainty is not in the intervals, the report says how it was explored (alternative models, an ensemble, sensitivity analysis) or that it was not.
 
-Check: both lists are present. An included list alone is partly met.
+Check: the included and the excluded kinds are both named, and model structure is addressed explicitly.
+An included list alone is partly met.
 
-Intervals from many methods assume every infection is observed, so they omit uncertainty from incomplete observation unless the model adds it.
+An interval covers only the uncertainty the model represents.
+Uncertainty about the model's own structure sits outside any single model's interval, so it has to be stated separately.
 
-Basis: GATHER 13, Gostic et al., WHO 2017.
+Basis: GATHER 13, ISPOR-SMDM Task Force-6, IPCC, McCabe et al., Gostic et al., WHO 2017.
 
 ### OR-09 Confidence statement
 
-Recommendation: the report states in one sentence of plain language how much confidence to place in the headline estimate, and why.
+Recommendation: the report states in plain language how much confidence to place in the headline estimate, as a level on a stated scale, with the reasons that set the level.
 
-Check: a sentence gives a confidence level, on a named scale or in plain words, with its reason.
+Check: a confidence level, the scale it comes from, and at least one reason.
+A level in plain words with no stated scale is partly met.
 
 Confidence is about the soundness of the evidence behind the estimate.
 It is distinct from the probability of an outcome (OR-10) and from the numeric interval (OR-07).
 
-Basis: WHO rapid risk assessment manual, PHIA. Transfer to a model estimate: added.
+Published scales, any of which can be used:
+
+- WHO rapid risk assessment: a descriptive scale from very low to very high, set by the reliability, completeness and quality of the information and the assumptions made.
+- IPCC: five levels (very low, low, medium, high, very high), assigned by rating the evidence (limited, medium, robust) and the agreement between lines of evidence (low, medium, high). This is the most structured route and leaves a traceable account.
+- GRADE: four levels of certainty (high, moderate, low, very low), for a body of evidence rather than a single model estimate.
+
+Basis: WHO rapid risk assessment manual, IPCC, GRADE, PHIA. Transfer to a model estimate: added.
 
 ### OR-10 Verbal probability on a defined scale
 
@@ -156,7 +169,7 @@ Not applicable where the report gives no probability in words.
 
 A published scale narrows the spread in how readers interpret probability words, without closing it.
 
-Basis: PHIA probability yardstick. Transfer to outbreak reporting: added.
+Basis: PHIA probability yardstick, IPCC likelihood scale. Transfer to outbreak reporting: added.
 
 ## Interpretation
 
@@ -240,19 +253,31 @@ Basis: Hadley et al., ORBIT.
 
 ## Performance
 
-### OR-19 Predictive performance
+### OR-19 Fit to the data
+
+Recommendation: the report shows how well the model reproduces the data it was fitted to, for example modelled against observed counts, and labels this as fit, distinct from predictive performance (OR-20).
+
+Check: a figure or statement comparing model output with the observed data used in fitting, labelled as fit.
+Detail of the checks used belongs in the technical document (OR-26).
+
+A model that cannot reproduce its own data is not credible.
+Good fit is weaker evidence than good prediction, because the data were used to fit the model.
+
+Basis: TRACE 6, ISPOR-7, GATHER 12, Abbott et al.
+
+### OR-20 Predictive performance
 
 Recommendation: where the report forecasts, it states how its previous forecasts performed, against a named comparator.
 
 Check: a performance statement on forecasts made before the data that tested them, with a comparator.
-Fit to the data used in fitting does not count.
+Fit to the data used in fitting does not count here; that is OR-19.
 Not applicable where the report does not forecast.
 
 Basis: EPIFORGE 11, EPIFORGE 12, TRACE 8. Placement in the non-technical document: added.
 
 ## Access
 
-### OR-20 Estimates available as data
+### OR-21 Estimates available as data
 
 Recommendation: the published estimates are downloadable in a format data can be extracted from, carrying a version or timestamp.
 
@@ -260,7 +285,7 @@ Check: a link to the estimates as CSV or similar, with a version or date.
 
 Basis: GATHER 15, EPIFORGE 16.
 
-### OR-21 Code available
+### OR-22 Code available
 
 Recommendation: the analysis code is accessible, and the report says where.
 
@@ -268,7 +293,7 @@ Check: a working link to the code, or a stated reason it is not available.
 
 Basis: GATHER 14, EPIFORGE 9, Abbott et al., Charniga et al.
 
-### OR-22 Authorship and funding
+### OR-23 Authorship and funding
 
 Recommendation: the report names its authors and its funding sources.
 
@@ -276,7 +301,7 @@ Check: authors or the responsible team, and funders, are named.
 
 Basis: GATHER 2, ISPOR-7.
 
-### OR-23 Contact and feedback route
+### OR-24 Contact and feedback route
 
 Recommendation: the report states how to raise a correction or a question, and with whom.
 
@@ -286,7 +311,7 @@ Basis: added.
 
 ## Methods
 
-### OR-24 Methods sufficient to reproduce
+### OR-25 Methods sufficient to reproduce
 
 Recommendation: the technical document describes every step of the analysis, including the mathematics and the key epidemiological inputs, in enough detail to reproduce it.
 
@@ -297,11 +322,11 @@ Full reproduction is outside the check.
 
 Basis: GATHER 10, EPIFORGE 3, ISPOR-7, TRACE 2, Gostic et al., Charniga et al., Abbott et al.
 
-### OR-25 Model evaluation and comparison
+### OR-26 Model evaluation and comparison
 
 Recommendation: the technical document reports how the model was evaluated and how it compares with other published estimates.
 
 Check: needs the technical document.
-An evaluation method and its results, including sensitivity analysis where done, and a comparison or a statement that none exists.
+An evaluation method and its results, including checks of fit to the data (for example posterior predictive checks) and sensitivity analysis where done, and a comparison or a statement that none exists.
 
-Basis: GATHER 11, GATHER 12, EPIFORGE 10, TRACE 6, TRACE 7.
+Basis: GATHER 11, GATHER 12, EPIFORGE 10, TRACE 6, TRACE 7, Abbott et al.
